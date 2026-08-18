@@ -1,0 +1,67 @@
+======================================================================
+  TRANSACTION EXPLANATION REPORT
+======================================================================
+
+Transaction ID: 4
+Actual Label: ILLICIT
+Model Prediction: ILLICIT
+Confidence: 91.13%
+
+----------------------------------------------------------------------
+IMPORTANT NEIGHBORS (by Metapath)
+----------------------------------------------------------------------
+
+M1: Centralized Transfer (Tx -> Add <- Tx)
+  No neighbors found
+
+M2: One-Way Flow (Tx -> Add -> Tx)
+  Top 3 most influential neighbors:
+    1. Tx_4 (importance: 0.207)
+    2. Tx_929 (importance: 0.201)
+    3. Tx_1280 (importance: 0.201)
+
+M3: Decentralized Transfer (Tx <- Add -> Tx)
+  Top 1 most influential neighbors:
+    1. Tx_4 (importance: 0.224)
+
+----------------------------------------------------------------------
+IMPORTANT FEATURES
+----------------------------------------------------------------------
+  Top 10 most influential features:
+    1. [45] 1-hop: Total BTC received (min)
+        Category: 1-hop aggregated (immediate neighbors)
+        Importance: 0.721
+    2. [89] 1-hop: Multisig usage rate
+        Category: 1-hop aggregated (immediate neighbors)
+        Importance: 0.718
+    3. [54] 1-hop: Transaction count (std)
+        Category: 1-hop aggregated (immediate neighbors)
+        Importance: 0.708
+    4. [112] 2-hop: Total BTC sent (min)
+        Category: 2-hop aggregated (extended neighborhood)
+        Importance: 0.706
+    5. [51] 1-hop: Total BTC sent (max)
+        Category: 1-hop aggregated (immediate neighbors)
+        Importance: 0.701
+    6. [148] 2-hop: Dormancy period (days)
+        Category: 2-hop aggregated (extended neighborhood)
+        Importance: 0.700
+    7. [52] 1-hop: Transaction count (sum)
+        Category: 1-hop aggregated (immediate neighbors)
+        Importance: 0.697
+    8. [154] 2-hop: Change address pattern
+        Category: 2-hop aggregated (extended neighborhood)
+        Importance: 0.694
+    9. [65] 1-hop: Unique addresses (sum)
+        Category: 1-hop aggregated (immediate neighbors)
+        Importance: 0.693
+    10. [123] 2-hop: Output count (mean)
+        Category: 2-hop aggregated (extended neighborhood)
+        Importance: 0.692
+
+----------------------------------------------------------------------
+SUSPICIOUS PATTERN ANALYSIS
+----------------------------------------------------------------------
+  No known suspicious patterns detected in top features
+
+======================================================================

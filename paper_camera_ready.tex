@@ -1,0 +1,546 @@
+%% AIxB 2026 -- Camera-ready (Short Paper, 4 pages)
+%% Submission 18: "A Graph Neural Network for Explainable Anti-Money
+%% Laundering in Blockchain Transactions"
+%%
+%% REVISION NOTES (see RESPONSE_TO_REVIEWERS.md for the full point-by-point):
+%%   R1/R4  code availability      -> Sec. I footnote + Sec. V-A
+%%   R2/R4  multi-seed + stats     -> all tables now mean +/- std over 5 seeds,
+%%                                    paired t-tests with 95% CIs
+%%   R3     abstract / clarity     -> abstract rewritten, abbreviations expanded,
+%%                                    new plain-language framing in Sec. I
+%%   R4     temporal claim         -> scoped to timestep position encoding;
+%%                                    TGN/TGAT explicitly listed as untested
+%%   R4     component ablation     -> new Table IV (2x2 design)
+%%   R4     reference [10]         -> resolved to Johannessen & Jullum (2025)
+
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+
+\begin{document}
+
+\title{A Graph Neural Network for Explainable\\
+Anti-Money Laundering in Blockchain Transactions}
+
+\author{\IEEEauthorblockN{Nandita Menon, Anushree Ashok, Jillian Priscilla, Debashis Guha}
+\IEEEauthorblockA{Department of Artificial Intelligence\\
+S P Jain School of Global Management, Dubai\\
+\{nandita.as24dxb015, anushree.as24dxb017, jillian.as24dxb012\}@spjain.org, debashis.guha@spjain.org}}
+
+\maketitle
+
+\begin{abstract}
+Criminals can launder Bitcoin by splitting illicit funds across multiple
+transactions and wallet addresses, making individual payments difficult to
+identify as suspicious. For compliance teams, the challenge is not only to
+detect potentially illicit transactions but also to provide clear, defensible
+reasons for investigating them. We formulate Bitcoin anti-money laundering
+(AML) as a graph-based transaction classification problem and evaluate graph
+neural networks (GNNs), which leverage both transaction features and
+information from neighbouring transactions, against conventional classifiers
+that consider each transaction independently. We introduce RiskMAGNN, a
+heterogeneous GNN that explicitly models the wallet address connecting pairs
+of transactions and weights each wallet-sharing relationship using priors
+informed by financial-crime investigation. Across ten random seeds with
+paired significance tests, graph structure provides the largest improvement,
+increasing average precision by 37.6 percentage points over a feature-only
+baseline ($p<10^{-4}$); RiskMAGNN further improves the area under the ROC
+curve by 2.5 points over a standard heterogeneous GNN ($p=0.002$), although
+its average-precision gain is not statistically significant across seeds.
+Ensembling predictions across the ten seeds produces the strongest detector
+(71.2\% average precision), and occasional training collapses in individual
+runs highlight the limitations of single-seed results on this benchmark. We
+further show that one of the three wallet-sharing relation types is entirely
+absent from the training portion of the standard benchmark split; this
+dataset issue, rather than model capacity, accounts for most of the observed
+validation--test gap. An explanation module provides transaction-level
+justifications to support compliance review, and all code and experimental
+results are released for reproducibility.
+\end{abstract}
+
+\begin{IEEEkeywords}
+anti-money laundering, graph neural networks, heterogeneous graphs, metapath
+aggregation, blockchain, explainability
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+Money laundering hides the origin of criminal funds through chains of
+intermediate transfers---\emph{layering}. On Bitcoin an operator splits a
+payment across many transactions and wallet addresses, so each transfer looks
+ordinary while the chain moves value away from its source. Two properties
+shape any detection system. First, the evidence is relational: what makes a
+transfer suspicious is the pattern of transfers around it, not its own amount
+or fee. Second, regulation (the EU Anti-Money Laundering Directive, the US
+Bank Secrecy Act) requires that a flagged transaction carry a
+human-interpretable justification, so an accurate but opaque detector is not
+deployable.
+
+Graph neural networks (GNNs) fit the first property: a GNN classifies each
+transaction by repeatedly mixing in information from its neighbours in the
+fund-flow graph, capturing multi-hop structure a per-transaction classifier
+cannot see~\cite{ferretti2025}. Most published benchmarks, however, model
+transactions only. Real laundering schemes reuse wallet addresses, and a
+transaction-only graph cannot express that two payments touched the same
+wallet; \emph{heterogeneous} datasets that model addresses as first-class
+nodes make this structure available~\cite{song2023}.
+
+This paper reports a careful empirical study rather than a large architectural
+gain. Our contributions: (i) a multi-seed comparison of feature-only,
+homogeneous-graph, and heterogeneous-graph models on the Elliptic and HBTBD
+datasets, with paired significance tests; (ii) RiskMAGNN, a domain-adapted
+variant of the metapath-aggregated GNN (MAGNN)~\cite{fu2020} combining a
+translation-based encoding of the shared wallet address~\cite{bordes2013}
+with attention over relation types initialised from forensic priors, with a
+component ablation; (iii) evidence that seed-to-seed spread on this benchmark
+is comparable to the differences between architectures, so single-seed
+comparisons should be treated with caution; and (iv) a diagnostic showing
+that one of the three wallet-sharing relation types is entirely missing from
+the official HBTBD training split---a previously unreported dataset issue
+that accounts for most of the validation--test gap. An explanation module
+built on GNNExplainer~\cite{ying2019} supplies per-transaction
+justifications. Code and all result files are available at
+\url{https://github.com/<ANONYMISED-FOR-NOW>/GNN_AML}.\footnote{Repository URL
+to be finalised before camera-ready upload; see \texttt{REPRODUCIBILITY.md}
+there for exact commands and runtimes.}
+
+\section{Related Work}
+
+Weber et al.~\cite{weber2019} established Elliptic as a public benchmark and
+showed that graph convolutional networks beat feature-only classifiers;
+Ferretti et al.~\cite{ferretti2025} confirmed consistent gains from graph
+structure across GCN, GAT and GraphSAGE~\cite{hamilton2017}, while
+identifying a ceiling for static homogeneous models on Elliptic's
+chronological split. Lawal~\cite{lawal2024} integrated GNNExplainer and SHAP
+into a homogeneous GCN, showing interpretability and performance are
+compatible.
+
+Deprez et al.~\cite{deprez2024} argue that temporal graph learning is needed
+to model how layering unfolds, and architectures such as TGN and TGAT target
+dynamic financial graphs. We do not test those architectures; we test only
+whether supplying the timestep as an input feature helps, find the effect
+inconsistent and not significant (Section~\ref{sec:temporal}), and therefore
+neither support nor contradict that position.
+
+Johannessen and Jullum~\cite{johannessen2025} show heterogeneous GNNs with
+relation-specific message passing outperform homogeneous models on
+proprietary bank data. Song and Gu~\cite{song2023} operationalise this for
+Bitcoin with HBTBD, reaching 92.2\% precision and 73.9\% F1 by feeding
+MAGNN-extracted features into a separately trained Random Forest. RiskMAGNN
+instead learns end to end and injects domain knowledge directly into the
+attention over relation types.
+
+\section{Datasets}
+
+\textbf{Elliptic} contains 203{,}769 transaction nodes and 234{,}355 directed
+edges across 49 time steps, with 165 features per node (94 local properties;
+71 neighbourhood aggregates) plus the time step; a subset is labelled licit
+or illicit. We use the standard chronological split: train on steps 1--29
+(10.88\% illicit), validate on 30--39, test on 40--49 (5.69\% illicit)---a
+realistic distribution shift.
+
+\textbf{HBTBD}~\cite{song2023} models wallet addresses as explicit nodes.
+Three address roles---input (Add\_A), output/forwarding (Add\_B), change
+(Add\_C)---define three \emph{metapaths} connecting transactions through a
+shared address: \textbf{M1} (Tx\,$\rightarrow$\,Add\_A\,$\leftarrow$\,Tx),
+both paying into the same address, the signature of a mixing service;
+\textbf{M2} (Tx\,$\rightarrow$\,Add\_B\,$\rightarrow$\,Tx), one-way flow
+through a forwarding address, characteristic of layering; \textbf{M3}
+(Tx\,$\leftarrow$\,Add\_C\,$\rightarrow$\,Tx), both drawing from the same
+source, consistent with structuring. The official split provides 29{,}699
+training and 16{,}346 test transaction nodes with 165 features each. One
+asymmetry is critical to every result below: \textbf{M2 edges are entirely
+absent from the training set} (0 instances) but number 77{,}418 in the test
+set, because one-way flows appear only in time steps 35--49. Any temporally
+valid partition of HBTBD inherits this asymmetry---a severe distribution
+shift for precisely the metapath that encodes layering.
+
+\section{RiskMAGNN}
+
+RiskMAGNN adapts MAGNN~\cite{fu2020} through two modifications.
+
+\textbf{Translation-based metapath encoding.} Standard MAGNN aggregates a
+metapath instance by concatenating its endpoint embeddings, discarding the
+intermediate entity. For AML the wallet address in the middle carries
+independent forensic signal: an address that recurs between illicit
+transactions is itself evidence. We replace concatenation with a TransE-style
+encoding~\cite{bordes2013}: node features are projected to a shared
+$d$-dimensional space $h'$, and for instance
+$P(\text{Tx}_v,\text{Add},\text{Tx}_u)$:
+\begin{equation}
+t = h'_{\text{Add}},\quad
+o_1 = h'_{\text{Tx}_v} + t \odot r_1,\quad
+o_2 = h'_{\text{Tx}_u} + t \odot r_2
+\end{equation}
+\begin{equation}
+h_P = o_1 \oplus t \oplus o_2
+\end{equation}
+where $r_1, r_2 \in \mathbb{R}^d$ are learned relation vectors, $\odot$ is the
+Hadamard product and $\oplus$ is concatenation. Because HBTBD ships
+pre-aggregated transaction-to-transaction adjacencies rather than address
+features, we approximate $t$ by mean-pooling the metapath neighbours of $v$.
+
+\textbf{Risk-biased attention over relation types.} After mean-pooling
+instances within each metapath type we fuse the three embeddings with
+attention whose logits carry a learnable per-type bias $b_m$:
+\begin{equation}
+\alpha_m = \mathrm{softmax}_m\!\left(\frac{q^\top k_m}{\sqrt{d}} + b_m\right),
+\qquad
+h_v = \sum_{m} \alpha_m h_v^{(m)}
+\end{equation}
+with $q = W_q h_v$ and $k_m = W_k h_v^{(m)}$. The biases are
+\emph{initialised} at $b_{\text{M2}}=0.6 > b_{\text{M1}}=0.3 >
+b_{\text{M3}}=0.1$ (one-way flow above address reuse above shared sourcing)
+and then trained. The model does not follow the prior blindly: the initial
+biases alone would give M2 an attention share of $0.43$, but the learned mean
+M2 attention is $0.29$ on the official split (M2 training edges absent) and
+$0.17$ on the resplit of Section~\ref{sec:resplit} (M2 observed but
+sparse)---the model down-weights the metapath the data cannot support.
+
+Each layer applies a residual connection followed by LayerNorm; we stack
+$L\in\{2,3\}$ layers with $d\in\{128,192\}$ and a two-layer classifier.
+Training uses focal loss ($\alpha=0.75$, $\gamma=2.0$), AdamW
+($\text{lr}=10^{-3}$, weight decay $5\times10^{-4}$) and a warmup-plus-cosine
+schedule.
+
+\textbf{Explanations.} We adapt GNNExplainer~\cite{ying2019} to the
+heterogeneous setting by learning one soft edge mask $M_e^{(m)}$ per metapath
+type plus a global feature mask $M_f$, optimised to preserve the original
+prediction under an $\ell_1$ sparsity penalty, so explanations decompose
+neighbour influence by relationship type.
+
+\section{Experimental Results}
+
+\subsection{Protocol}
+\label{sec:protocol}
+
+HBTBD results are the mean $\pm$ sample standard deviation over \textbf{ten
+seeds} (five original, five fixed before any extended result was observed);
+Elliptic uses the original five. Every model is re-seeded immediately before
+construction, and all models within a table share an identical protocol:
+features standardised on training statistics only, a strict temporal
+validation split, a fixed epoch budget with best-validation checkpoint
+selection, and identical loss and optimiser settings. Since every model sees
+the same seeds, seeds are matched observations and we use \textbf{paired}
+two-sided $t$-tests with 95\% confidence intervals. (At $n=5$ a Wilcoxon test
+cannot reach $p<0.05$ at all, so rank tests are not used.) Our primary metric
+is average precision (PR-AUC), the informative metric under heavy class
+imbalance. We additionally report per-architecture \textbf{seed ensembles}:
+the mean of the ten models' predicted probabilities, evaluated once.
+
+This protocol supersedes the single-seed numbers in the submitted version,
+and we state two corrections explicitly. First, the previously reported
+69.02\% PR-AUC was an artefact of one seed in a configuration where two
+models were trained in one process under one global seed; it does not
+reproduce under isolated re-seeding. Second, the previous SimpleHeteroGNN
+baseline was trained under a weaker protocol (random validation split,
+identity metapath adjacencies), so the two were never comparable.
+Table~\ref{tab:hbtbd} retrains both identically.
+
+\subsection{Elliptic: Graph Structure and the Time Step}
+\label{sec:temporal}
+
+\begin{table}[t]
+\caption{Elliptic chronological split (5 seeds). The lower block crosses
+timestep position encoding with skip connections on the GraphSAGE encoder.}
+\label{tab:elliptic}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Model} & \textbf{Test PR-AUC} & \textbf{Test ROC-AUC} \\
+\midrule
+Logistic Regression (no graph) & $16.21 \pm 0.00$ & $82.44 \pm 0.00$ \\
+\midrule
+Skip, no timestep (GraphSAGE) & $\mathbf{53.77 \pm 0.98}$ & $81.75 \pm 0.38$ \\
+Skip, $+$ timestep & $52.14 \pm 1.79$ & $81.59 \pm 0.98$ \\
+No skip, $+$ timestep & $43.39 \pm 4.64$ & $81.62 \pm 0.80$ \\
+No skip, no timestep & $38.92 \pm 6.96$ & $79.24 \pm 1.49$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The first row of Table~\ref{tab:elliptic} isolates the value of graph
+structure: moving from a feature-only classifier to GraphSAGE gains $+37.56$
+PR-AUC points, 95\% CI $[+36.34, +38.78]$, $p<10^{-4}$---by far the largest
+effect in the study. ROC-AUC is essentially flat across all five rows; only
+average precision separates them, which is why we treat PR-AUC as primary.
+
+The lower block crosses the timestep input with skip connections and does not
+support a directional temporal claim: with skips, removing the timestep helps
+by $1.63$ points ($p=0.23$); without skips, removing it \emph{hurts} by
+$4.47$ points ($p=0.37$). The sign flips with the architecture and neither
+contrast is significant. What \emph{is} significant is the skip connection:
+$+8.75$ points with the timestep ($p=0.022$), $+14.85$ without ($p=0.007$).
+
+\textbf{Correction and scope.} The submitted version reported that removing
+temporal encoding improved PR-AUC by $6.7$ points and concluded temporal
+modelling harms AML detection. That comparison rested on a single seed and on
+the no-skip rows; we withdraw the claim. The variable here is only \emph{the
+timestep supplied as an input feature}---we did not evaluate TGN, TGAT, or
+any architecture modelling time through message passing, so nothing here
+bears on temporal graph learning in general. The defensible conclusion is
+methodological: a raw time index is not a reliable improvement under
+chronological distribution shift, its apparent effect is easily confounded by
+architectural stabilisers, and it should be ablated with seed control rather
+than assumed either way.
+
+\subsection{Heterogeneous Models on HBTBD}
+
+\begin{table}[t]
+\caption{HBTBD official split (mean $\pm$ std over 10 seeds, unified
+protocol). Ens.\ rows: mean of the 10 models' probabilities, evaluated once.}
+\label{tab:hbtbd}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model} & \textbf{PR-AUC} & \textbf{ROC-AUC} & \textbf{F1} \\
+\midrule
+SimpleHeteroGNN     & $64.80 \pm 1.22$ & $87.62 \pm 1.20$ & $63.24 \pm 1.82$ \\
+RiskMAGNN ($d$=128) & $63.50 \pm 6.78$ & $89.95 \pm 1.04$ & $62.33 \pm 3.72$ \\
+RiskMAGNN ($d$=192) & $66.83 \pm 4.04$ & $90.15 \pm 1.38$ & $64.53 \pm 3.22$ \\
+\midrule
+SimpleHeteroGNN (ens.) & $70.18$ & $89.57$ & $67.48$ \\
+RiskMAGNN $d$=192 (ens.) & $\mathbf{71.23}$ & $\mathbf{91.17}$ & $\mathbf{68.12}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:hbtbd} reports the central comparison. On PR-AUC no
+single-model difference is significant: RiskMAGNN ($d$=192) leads
+SimpleHeteroGNN by $+2.03$ points, 95\% CI $[-0.47, +4.54]$, $p=0.099$. On
+ROC-AUC the advantage is significant and robust for \emph{both} sizes:
+$+2.33$ points ($p=0.002$) for $d$=128 and $+2.53$ points ($p=0.002$) for
+$d$=192. The honest reading is that RiskMAGNN produces a reliably better
+global ranking of transactions---which is what ROC-AUC measures---but its
+edge in the high-recall regime that PR-AUC rewards is within seed noise.
+
+Two further observations matter in practice. First, \textbf{training can
+collapse on individual seeds}: the $d$=128 model fell to 45.8\% PR-AUC on one
+of ten seeds (hence its $\pm 6.78$), with training loss decreasing normally
+throughout---only validation flags the failure. A single-seed paper hitting
+such a seed (or a lucky one) would report a dramatically wrong number.
+Second, the \textbf{seed ensemble} recovers what individual runs lose:
+averaging the ten models' probabilities lifts every architecture by 4--5
+PR-AUC points, and the RiskMAGNN $d$=192 ensemble is the best detector we
+observe (71.2\% PR-AUC, 91.2\% ROC-AUC, 68.1\% F1)---the cheapest reliable
+improvement available on this benchmark. The ensemble F1 narrows but does not
+close the gap to the published Random Forest of Song and Gu
+(73.9\%)~\cite{song2023}, whose two-stage pipeline tunes a classifier
+separately on frozen features, whereas we optimise a single end-to-end
+objective under focal loss, trading precision for recall on the rare class.
+Selecting the F1 threshold on validation transferred \emph{worse} than the
+default to test ($59.3$ vs $63.2$ for SimpleHeteroGNN)---itself evidence of
+the validation--test shift documented below.
+
+\subsection{Component Ablation}
+
+\begin{table}[t]
+\caption{Component ablation, $2\times2$ design on the RiskMAGNN $d$=128
+skeleton (10 seeds). All variants share residual connections, LayerNorm,
+classifier and training schedule.}
+\label{tab:ablation}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Variant} & \textbf{PR-AUC} & \textbf{ROC-AUC} & \textbf{F1} \\
+\midrule
+Full (both)     & $\mathbf{63.50 \pm 6.78}$ & $89.95 \pm 1.04$ & $\mathbf{62.33 \pm 3.72}$ \\
+$-$ TransE      & $61.54 \pm 10.18$ & $\mathbf{90.51 \pm 1.03}$ & $61.77 \pm 4.22$ \\
+$-$ Risk bias   & $62.61 \pm 3.20$ & $90.46 \pm 0.47$ & $61.94 \pm 2.79$ \\
+$-$ Both        & $60.77 \pm 4.04$ & $89.75 \pm 0.53$ & $60.62 \pm 3.27$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:ablation} asks what the two proposed components contribute;
+the answer is less than we initially believed, and we report the trajectory
+candidly. On the original five seeds, removing both components cost $3.84$
+PR-AUC points ($p=0.020$); on ten seeds the estimate is $+2.72$, 95\% CI
+$[-0.10, +5.55]$, $p=0.057$---directionally consistent in nine of ten seeds
+but marginal, and not claimed as confirmed. Neither component is individually
+significant. What the ablation shows clearly is instability: three of four
+variants---including the full model---suffer at least one collapsed seed (to
+45.8\%, 34.5\% and 53.0\% PR-AUC), while uniform attention is most stable
+($\pm 3.20$). Component effects of a few points cannot be reliably resolved
+on a benchmark where single seeds can swing by twenty.
+
+\subsection{The M2 Metapath Diagnostic}
+\label{sec:resplit}
+
+\begin{table}[t]
+\caption{Effect of M2 availability during training (RiskMAGNN $d$=192;
+official row over 10 seeds, resplit row over 5). The resplit sacrifices
+temporal validity and is a diagnostic, not a performance claim.}
+\label{tab:resplit}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Split} & \textbf{Val PR} & \textbf{Test PR} & \textbf{Gap (pp)} \\
+\midrule
+Official (M2 absent)  & $96.5 \pm 1.5$ & $66.8 \pm 4.0$ & $29.7 \pm 4.0$ \\
+Resplit (M2 present)  & $97.5 \pm 1.4$ & $94.3 \pm 0.4$ & $3.2 \pm 1.4$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+To isolate the effect of M2's absence we build a stratified random 80/20
+resplit of the combined HBTBD data so that all three metapaths appear in
+training---deliberately breaking temporal ordering, as a diagnostic only. The
+validation--test gap collapses from $29.7 \pm 4.0$ to $3.2 \pm 1.4$ points
+(Table~\ref{tab:resplit}), with resplit test PR-AUC remarkably stable
+($\pm 0.35$): most of the gap previously attributed to model weakness is a
+property of the benchmark split, which therefore understates model capacity
+for layering detection and makes architecture comparisons on it comparisons
+under a missing relation type.
+
+\subsection{Explanation Findings}
+
+Explanations for 200 test transactions show three consistent patterns:
+RiskMAGNN relies mainly on neighbourhood-aggregated features (indices
+41--164) rather than local attributes, validating the graph-based approach;
+per-metapath edge masks assign highest importance to M1 neighbours for
+illicit predictions, consistent with mixing-service behaviour; and false
+positives concentrate on high-volume transactions routed through shared
+output addresses---the signature of a cryptocurrency exchange. The last is
+actionable: exchange-like nodes can be identified by high M1 in-degree and
+given a separate threshold.
+
+\section{Discussion}
+
+The dominant lesson from re-running this study with seed control is about
+evaluation. On HBTBD the spread across seeds ($\pm 1$ to $\pm 7$ PR-AUC
+points, with individual seeds collapsing by twenty) is of the same order as
+the differences between architectures, so a single-seed comparison can report
+a multi-point ``improvement'' that is pure initialisation luck---as our own
+submitted version did. Doubling the seeds from five to ten itself changed
+which effects looked significant (the ablation effect moved from $p=0.020$ to
+$p=0.057$; the ROC-AUC advantage strengthened). Multi-seed reporting with
+matched-pair tests should be a baseline expectation on this benchmark.
+
+Ordered by size, the effects that survive: graph structure ($37.6$ points),
+the benchmark-split flaw ($\approx 27$ points), skip connections ($9$--$15$
+points on Elliptic), seed ensembling ($4$--$5$ points for every
+architecture), and RiskMAGNN's ranking advantage ($+2.3$ to $+2.5$ ROC-AUC
+points, $p=0.002$). The component effect on average precision is suggestive
+but unconfirmed; capacity scaling shows no significant effect. Two claims
+from the submitted version did not survive and are withdrawn above. We
+consider the benchmark-split flaw the most useful contribution, since it
+affects anyone evaluating on HBTBD's official split.
+
+\section{Limitations}
+
+Ten seeds bounds seed variance but still leaves few-point effects
+undetectable when single seeds can collapse, so our non-significant results
+are inconclusive rather than evidence of no effect. Both benchmarks are
+academic-scale (203K and 46K transaction nodes); deployment requires larger
+networks with different class distributions. We do not evaluate dedicated
+temporal graph architectures (TGN, TGAT), so our temporal findings are
+limited to timestep position encoding. The M2 asymmetry cannot be resolved
+without data from steps 1--34 in which one-way flows appear. Explanation
+optimisation (200 steps per transaction) is too slow for real-time triage.
+The forensic prior ordering is a design choice we initialise but do not
+independently validate against labelled typologies.
+
+\section{Conclusion}
+
+We presented RiskMAGNN, a heterogeneous GNN for Bitcoin AML combining
+translation-based metapath encoding with forensic-prior-biased attention,
+evaluated over ten seeds with paired significance tests. Graph structure
+dominates ($+37.6$ average-precision points over a feature-only baseline).
+Our architectural contribution is real but modest: a significant ranking
+advantage ($+2.5$ ROC-AUC points, $p=0.002$) whose average-precision
+counterpart stays within seed noise, and a suggestive but unconfirmed joint
+component effect ($+2.7$ points, $p=0.057$). The practical recommendation is
+the seed ensemble, which lifts every architecture by $4$--$5$ points and
+reaches 71.2\% average precision. We could not replicate the larger
+single-seed gains in our submitted version and report corrected numbers here.
+The most transferable result is a property of the benchmark rather than any
+model: the M2 metapath is missing from HBTBD's official training split, and
+that absence accounts for most of the validation--test gap. Code and all
+result files are released so these numbers can be checked.
+
+\section*{Acknowledgment}
+
+The authors thank S P Jain School of Global Management for computational
+resources and research support.
+
+\section*{Disclosure of AI-Generated Content}
+
+In line with IEEE policy, we disclose that an AI assistant (Anthropic's
+Claude) supported this work in two ways: it helped write the experiment and
+statistical-analysis scripts released with this paper, and it helped edit the
+wording of the Abstract, Introduction and Discussion. All experiments were
+run by the authors using the released code, and every number, claim and
+conclusion was checked by the authors, who take full responsibility for the
+paper's content.
+
+\begin{thebibliography}{10}
+
+\bibitem{song2023}
+J.~Song and Y.~Gu, ``HBTBD: A heterogeneous Bitcoin transaction behavior
+dataset for anti-money laundering,'' \emph{Applied Sciences}, vol.~13,
+no.~15, p.~8766, Jul. 2023, doi: 10.3390/app13158766.
+
+\bibitem{bordes2013}
+A.~Bordes, N.~Usunier, A.~Garcia-Duran, J.~Weston, and O.~Yakhnenko,
+``Translating embeddings for modeling multi-relational data,'' in
+\emph{Advances in Neural Information Processing Systems}, vol.~26, 2013,
+pp.~2787--2795.
+
+\bibitem{fu2020}
+X.~Fu, J.~Zhang, Z.~Meng, and I.~King, ``MAGNN: Metapath aggregated graph
+neural network for heterogeneous graph embedding,'' in \emph{Proc. The Web
+Conference 2020}, Taipei, Taiwan, Apr. 2020, pp.~2331--2341.
+
+\bibitem{hamilton2017}
+W.~L. Hamilton, R.~Ying, and J.~Leskovec, ``Inductive representation learning
+on large graphs,'' in \emph{Advances in Neural Information Processing
+Systems}, vol.~30, 2017.
+
+\bibitem{weber2019}
+M.~Weber \emph{et al.}, ``Anti-money laundering in Bitcoin: Experimenting with
+graph convolutional networks for financial forensics,'' arXiv:1908.02591,
+2019.
+
+\bibitem{lawal2024}
+I.~B. Lawal, ``An explainable graph convolutional network for anti-money
+laundering detection in Bitcoin transactions,'' \emph{Int. J. Network Security
+\& Its Applications}, vol.~16, no.~1, pp.~1--15, Jan. 2024.
+
+\bibitem{ferretti2025}
+F.~Ferretti, A.~Ceccarini, A.~Marchetti, and A.~Sgarro, ``A systematic
+evaluation of graph neural networks for cryptocurrency anti-money
+laundering,'' \emph{IEEE Access}, vol.~13, pp.~23456--23470, 2025.
+
+\bibitem{deprez2024}
+S.~Deprez, S.~Rymaszewski, and M.~Badra, ``Network analytics for anti-money
+laundering: A survey of graph learning techniques,'' arXiv:2405.19383, May
+2024.
+
+\bibitem{ying2019}
+R.~Ying, D.~Bourgeois, J.~You, M.~Zitnik, and J.~Leskovec, ``GNNExplainer:
+Generating explanations for graph neural networks,'' in \emph{Advances in
+Neural Information Processing Systems}, vol.~32, 2019, pp.~9240--9251.
+
+\bibitem{johannessen2025}
+F.~Johannessen and M.~Jullum, ``Finding money launderers using heterogeneous
+graph neural networks,'' \emph{The Journal of Finance and Data Science},
+vol.~11, art. no. 100175, Dec. 2025, doi: 10.1016/j.jfds.2025.100175.
+
+\end{thebibliography}
+
+\end{document}

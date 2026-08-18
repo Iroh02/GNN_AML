@@ -1,0 +1,71 @@
+# Configuration for GNN-based AML Detection
+# Elliptic Bitcoin Transaction Dataset
+
+# Data settings
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  elliptic_url: "https://www.kaggle.com/datasets/ellipticco/elliptic-data-set"
+  num_features: 166
+  num_classes: 2  # Binary: licit vs illicit (unknown excluded from training)
+  num_timesteps: 49
+
+# Training settings
+training:
+  seed: 42
+  train_ratio: 0.6
+  val_ratio: 0.2
+  test_ratio: 0.2
+  batch_size: 1024
+  num_epochs: 200
+  early_stopping_patience: 20
+  learning_rate: 0.01
+  weight_decay: 0.0005
+
+# Model settings
+model:
+  # GraphSAGE
+  graphsage:
+    hidden_dim: 128
+    num_layers: 2
+    dropout: 0.5
+    aggregator: "mean"
+
+  # Temporal GNN
+  temporal_gnn:
+    hidden_dim: 128
+    num_layers: 2
+    dropout: 0.5
+    time_dim: 32
+    memory_dim: 128
+    num_heads: 4
+
+  # Edge features
+  edge_features:
+    use_direction: true
+    use_time_gap: true
+    use_degree_dynamics: true
+    use_activity_rate: true
+
+# Evaluation settings
+evaluation:
+  metrics:
+    - "pr_auc"
+    - "precision_recall_curve"
+    - "precision_at_k"
+  precision_at_k_values: [100, 500, 1000]
+  num_runs: 3
+
+# Explainability settings
+explainability:
+  method: "gnnexplainer"  # or "pgexplainer"
+  num_hops: 2
+  top_k_edges: 10
+  epochs: 100
+
+# Hardware settings
+hardware:
+  # NOTE: RTX 50-series (Blackwell/sm_120) not yet supported in stable PyTorch
+  # Use "cpu" for now, or "cuda" if you have RTX 40-series or older
+  device: "cpu"  # "cuda" or "cpu"
+  num_workers: 4

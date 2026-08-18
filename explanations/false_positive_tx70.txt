@@ -1,0 +1,67 @@
+======================================================================
+  TRANSACTION EXPLANATION REPORT
+======================================================================
+
+Transaction ID: 70
+Actual Label: LICIT
+Model Prediction: ILLICIT
+Confidence: 96.43%
+
+----------------------------------------------------------------------
+IMPORTANT NEIGHBORS (by Metapath)
+----------------------------------------------------------------------
+
+M1: Centralized Transfer (Tx -> Add <- Tx)
+  No neighbors found
+
+M2: One-Way Flow (Tx -> Add -> Tx)
+  Top 2 most influential neighbors:
+    1. Tx_140 (importance: 0.203)
+    2. Tx_70 (importance: 0.200)
+
+M3: Decentralized Transfer (Tx <- Add -> Tx)
+  Top 2 most influential neighbors:
+    1. Tx_70 (importance: 0.578)
+    2. Tx_140 (importance: 0.201)
+
+----------------------------------------------------------------------
+IMPORTANT FEATURES
+----------------------------------------------------------------------
+  Top 10 most influential features:
+    1. [51] 1-hop: Total BTC sent (max)
+        Category: 1-hop aggregated (immediate neighbors)
+        Importance: 0.751
+    2. [54] 1-hop: Transaction count (std)
+        Category: 1-hop aggregated (immediate neighbors)
+        Importance: 0.745
+    3. [154] 2-hop: Change address pattern
+        Category: 2-hop aggregated (extended neighborhood)
+        Importance: 0.722
+    4. [41] 1-hop: Number of neighbors
+        Category: 1-hop aggregated (immediate neighbors)
+        Importance: 0.718
+    5. [119] 2-hop: Fee (mean)
+        Category: 2-hop aggregated (extended neighborhood)
+        Importance: 0.717
+    6. [137] 2-hop: Degree centrality (mean)
+        Category: 2-hop aggregated (extended neighborhood)
+        Importance: 0.715
+    7. [52] 1-hop: Transaction count (sum)
+        Category: 1-hop aggregated (immediate neighbors)
+        Importance: 0.712
+    8. [90] 1-hop: P2PKH ratio
+        Category: 1-hop aggregated (immediate neighbors)
+        Importance: 0.707
+    9. [25] Virtual size
+        Category: Local (transaction-specific)
+        Importance: 0.661
+    10. [138] 2-hop: Degree centrality (std)
+        Category: 2-hop aggregated (extended neighborhood)
+        Importance: 0.649
+
+----------------------------------------------------------------------
+SUSPICIOUS PATTERN ANALYSIS
+----------------------------------------------------------------------
+  No known suspicious patterns detected in top features
+
+======================================================================

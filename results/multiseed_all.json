@@ -1,0 +1,206 @@
+{
+  "seeds": [
+    0,
+    1,
+    7,
+    42,
+    123
+  ],
+  "epochs": 400,
+  "per_run": [
+    {
+      "model": "SimpleHeteroGNN",
+      "seed": 0,
+      "val_pr_auc": 0.9991419420822745,
+      "test_pr_auc": 0.6490989532981661,
+      "test_roc_auc": 0.8705829019767838,
+      "test_f1": 0.6409714889123548,
+      "test_precision": 0.7484586929716399,
+      "test_recall": 0.5604801477377654
+    },
+    {
+      "model": "SimpleHeteroGNN",
+      "seed": 1,
+      "val_pr_auc": 0.9985470102550102,
+      "test_pr_auc": 0.6440712540113606,
+      "test_roc_auc": 0.8587569780667422,
+      "test_f1": 0.6427440633245383,
+      "test_precision": 0.75,
+      "test_recall": 0.5623268698060941
+    },
+    {
+      "model": "SimpleHeteroGNN",
+      "seed": 7,
+      "val_pr_auc": 0.998943182836814,
+      "test_pr_auc": 0.6563724027387848,
+      "test_roc_auc": 0.887791398205027,
+      "test_f1": 0.6210526315789474,
+      "test_precision": 0.6444885799404171,
+      "test_recall": 0.5992613111726686
+    },
+    {
+      "model": "SimpleHeteroGNN",
+      "seed": 42,
+      "val_pr_auc": 0.9990704132363316,
+      "test_pr_auc": 0.6550298710484997,
+      "test_roc_auc": 0.8818575195181995,
+      "test_f1": 0.6192468619246861,
+      "test_precision": 0.5661820964039785,
+      "test_recall": 0.6832871652816251
+    },
+    {
+      "model": "SimpleHeteroGNN",
+      "seed": 123,
+      "val_pr_auc": 0.9989693119581635,
+      "test_pr_auc": 0.6308391245734892,
+      "test_roc_auc": 0.8602673385187469,
+      "test_f1": 0.6181818181818182,
+      "test_precision": 0.7066508313539193,
+      "test_recall": 0.5493998153277931
+    },
+    {
+      "model": "RiskMAGNN (Base)",
+      "seed": 0,
+      "val_pr_auc": 0.9426594533619838,
+      "test_pr_auc": 0.6526737633546453,
+      "test_roc_auc": 0.8967780610434627,
+      "test_f1": 0.6288888888888889,
+      "test_precision": 0.7894002789400278,
+      "test_recall": 0.5226223453370268
+    },
+    {
+      "model": "RiskMAGNN (Base)",
+      "seed": 1,
+      "val_pr_auc": 0.9679311075089281,
+      "test_pr_auc": 0.6711389624576356,
+      "test_roc_auc": 0.9100409326678455,
+      "test_f1": 0.642,
+      "test_precision": 0.7001090512540894,
+      "test_recall": 0.592797783933518
+    },
+    {
+      "model": "RiskMAGNN (Base)",
+      "seed": 7,
+      "val_pr_auc": 0.9308151813859462,
+      "test_pr_auc": 0.6749381329553283,
+      "test_roc_auc": 0.9082320815296999,
+      "test_f1": 0.6592517694641051,
+      "test_precision": 0.7284916201117319,
+      "test_recall": 0.6020313942751616
+    },
+    {
+      "model": "RiskMAGNN (Base)",
+      "seed": 42,
+      "val_pr_auc": 0.9524462218647902,
+      "test_pr_auc": 0.6473468758852999,
+      "test_roc_auc": 0.9056956971545198,
+      "test_f1": 0.6371220020855057,
+      "test_precision": 0.7317365269461078,
+      "test_recall": 0.564173591874423
+    },
+    {
+      "model": "RiskMAGNN (Base)",
+      "seed": 123,
+      "val_pr_auc": 0.97074468079843,
+      "test_pr_auc": 0.6321087210526701,
+      "test_roc_auc": 0.9102998585163826,
+      "test_f1": 0.604364857302742,
+      "test_precision": 0.7670454545454546,
+      "test_recall": 0.4986149584487535
+    },
+    {
+      "model": "RiskMAGNN (Large)",
+      "seed": 0,
+      "val_pr_auc": 0.9584003139778232,
+      "test_pr_auc": 0.6025519647855553,
+      "test_roc_auc": 0.88586857129617,
+      "test_f1": 0.5767301905717152,
+      "test_precision": 0.6311745334796927,
+      "test_recall": 0.530932594644506
+    },
+    {
+      "model": "RiskMAGNN (Large)",
+      "seed": 1,
+      "val_pr_auc": 0.9777301540704686,
+      "test_pr_auc": 0.6695479045395103,
+      "test_roc_auc": 0.9100801042769409,
+      "test_f1": 0.6364653243847874,
+      "test_precision": 0.8070921985815603,
+      "test_recall": 0.5253924284395198
+    },
+    {
+      "model": "RiskMAGNN (Large)",
+      "seed": 7,
+      "val_pr_auc": 0.9485327112765344,
+      "test_pr_auc": 0.6811330289839965,
+      "test_roc_auc": 0.9006705393020098,
+      "test_f1": 0.665606783253842,
+      "test_precision": 0.7810945273631841,
+      "test_recall": 0.579870729455217
+    },
+    {
+      "model": "RiskMAGNN (Large)",
+      "seed": 42,
+      "val_pr_auc": 0.9751584434174584,
+      "test_pr_auc": 0.6525646089876327,
+      "test_roc_auc": 0.9044354300337892,
+      "test_f1": 0.6520577231427044,
+      "test_precision": 0.7741116751269036,
+      "test_recall": 0.5632502308402585
+    },
+    {
+      "model": "RiskMAGNN (Large)",
+      "seed": 123,
+      "val_pr_auc": 0.9543575628799243,
+      "test_pr_auc": 0.6363953785485358,
+      "test_roc_auc": 0.8764365015512259,
+      "test_f1": 0.6405375139977604,
+      "test_precision": 0.813655761024182,
+      "test_recall": 0.5281625115420129
+    }
+  ],
+  "summary": {
+    "SimpleHeteroGNN": {
+      "test_pr_auc": {
+        "mean": 0.6470823211340602,
+        "std": 0.010325259450408557
+      },
+      "test_roc_auc": {
+        "mean": 0.8718512272570997,
+        "std": 0.012859523939886838
+      },
+      "test_f1": {
+        "mean": 0.628439372784469,
+        "std": 0.01230814500707663
+      }
+    },
+    "RiskMAGNN (Base)": {
+      "test_pr_auc": {
+        "mean": 0.6556412911411159,
+        "std": 0.017634705276844118
+      },
+      "test_roc_auc": {
+        "mean": 0.906209326182382,
+        "std": 0.005583855727203892
+      },
+      "test_f1": {
+        "mean": 0.6343255035482483,
+        "std": 0.020094987775360604
+      }
+    },
+    "RiskMAGNN (Large)": {
+      "test_pr_auc": {
+        "mean": 0.6484385771690462,
+        "std": 0.03074969450713018
+      },
+      "test_roc_auc": {
+        "mean": 0.895498229292027,
+        "std": 0.013922438755433433
+      },
+      "test_f1": {
+        "mean": 0.6342795070701619,
+        "std": 0.034107651184476784
+      }
+    }
+  }
+}

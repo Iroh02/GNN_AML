@@ -1,0 +1,1090 @@
+{
+  "Model comparison, n=10 (official HBTBD split, extended seeds)": {
+    "seeds": [
+      0,
+      1,
+      7,
+      11,
+      21,
+      42,
+      77,
+      123,
+      2024,
+      31337
+    ],
+    "descriptive": {
+      "SimpleHeteroGNN": {
+        "test_pr_auc": {
+          "mean": 64.79578315412905,
+          "std": 1.2237950845166963
+        },
+        "test_roc_auc": {
+          "mean": 87.62432357890694,
+          "std": 1.198202054606572
+        },
+        "test_f1": {
+          "mean": 63.23615391827966,
+          "std": 1.8235126693237662
+        }
+      },
+      "RiskMAGNN (Base)": {
+        "test_pr_auc": {
+          "mean": 63.496707364442294,
+          "std": 6.7758230039502685
+        },
+        "test_roc_auc": {
+          "mean": 89.95200706552984,
+          "std": 1.0412733888578358
+        },
+        "test_f1": {
+          "mean": 62.32515144224876,
+          "std": 3.7163258145022167
+        }
+      },
+      "RiskMAGNN (Large)": {
+        "test_pr_auc": {
+          "mean": 66.82961708945365,
+          "std": 4.042177810102957
+        },
+        "test_roc_auc": {
+          "mean": 90.15337545234135,
+          "std": 1.3820023410943159
+        },
+        "test_f1": {
+          "mean": 64.52650759088235,
+          "std": 3.2223246629073192
+        }
+      }
+    },
+    "comparisons": {
+      "test_pr_auc": {
+        "SimpleHeteroGNN vs RiskMAGNN (Base)": {
+          "n_seeds": 10,
+          "mean_diff": 1.2990757896867677,
+          "std_diff": 6.791475590527669,
+          "ci95_low": -3.559253175728398,
+          "ci95_high": 6.1574047551019335,
+          "t_stat": 0.6048815598073708,
+          "p_paired_t": 0.5601971365484261,
+          "p_wilcoxon": 0.625,
+          "cohens_dz": 0.19128034436266525,
+          "significant_at_05": false
+        },
+        "SimpleHeteroGNN vs RiskMAGNN (Large)": {
+          "n_seeds": 10,
+          "mean_diff": -2.033833935324595,
+          "std_diff": 3.497347105283625,
+          "ci95_low": -4.53568533966575,
+          "ci95_high": 0.4680174690165595,
+          "t_stat": -1.8389789244690162,
+          "p_paired_t": 0.09907227223782807,
+          "p_wilcoxon": 0.10546875,
+          "cohens_dz": -0.5815361970368843,
+          "significant_at_05": false
+        },
+        "RiskMAGNN (Base) vs RiskMAGNN (Large)": {
+          "n_seeds": 10,
+          "mean_diff": -3.332909725011363,
+          "std_diff": 9.171196097461074,
+          "ci95_low": -9.89358818934135,
+          "ci95_high": 3.227768739318625,
+          "t_stat": -1.1492051696156746,
+          "p_paired_t": 0.28009454619506263,
+          "p_wilcoxon": 0.275390625,
+          "cohens_dz": -0.36341058348256616,
+          "significant_at_05": false
+        }
+      },
+      "test_roc_auc": {
+        "SimpleHeteroGNN vs RiskMAGNN (Base)": {
+          "n_seeds": 10,
+          "mean_diff": -2.327683486622881,
+          "std_diff": 1.6923508718751328,
+          "ci95_low": -3.538318370144233,
+          "ci95_high": -1.1170486031015294,
+          "t_stat": -4.3494417215825925,
+          "p_paired_t": 0.0018517626508173896,
+          "p_wilcoxon": 0.001953125,
+          "cohens_dz": -1.375414239036493,
+          "significant_at_05": true
+        },
+        "SimpleHeteroGNN vs RiskMAGNN (Large)": {
+          "n_seeds": 10,
+          "mean_diff": -2.529051873434382,
+          "std_diff": 1.84146109608554,
+          "ci95_low": -3.8463537855954826,
+          "ci95_high": -1.2117499612732814,
+          "t_stat": -4.34305359899769,
+          "p_paired_t": 0.0018691109186724881,
+          "p_wilcoxon": 0.00390625,
+          "cohens_dz": -1.3733941373024272,
+          "significant_at_05": true
+        },
+        "RiskMAGNN (Base) vs RiskMAGNN (Large)": {
+          "n_seeds": 10,
+          "mean_diff": -0.20136838681150096,
+          "std_diff": 1.9955259483186831,
+          "ci95_low": -1.6288816549849308,
+          "ci95_high": 1.2261448813619287,
+          "t_stat": -0.31910522216695375,
+          "p_paired_t": 0.7569286378192412,
+          "p_wilcoxon": 0.845703125,
+          "cohens_dz": -0.10090993153016253,
+          "significant_at_05": false
+        }
+      },
+      "test_f1": {
+        "SimpleHeteroGNN vs RiskMAGNN (Base)": {
+          "n_seeds": 10,
+          "mean_diff": 0.9110024760309102,
+          "std_diff": 3.5747450304304302,
+          "ci95_low": -1.6462160685718117,
+          "ci95_high": 3.468221020633632,
+          "t_stat": 0.8058876238129208,
+          "p_paired_t": 0.44108000054104457,
+          "p_wilcoxon": 1.0,
+          "cohens_dz": 0.25484404293897783,
+          "significant_at_05": false
+        },
+        "SimpleHeteroGNN vs RiskMAGNN (Large)": {
+          "n_seeds": 10,
+          "mean_diff": -1.2903536726027034,
+          "std_diff": 3.398913603208574,
+          "ci95_low": -3.721789991455592,
+          "ci95_high": 1.1410826462501853,
+          "t_stat": -1.200517891580357,
+          "p_paired_t": 0.2605818949863059,
+          "p_wilcoxon": 0.193359375,
+          "cohens_dz": -0.37963709091770076,
+          "significant_at_05": false
+        },
+        "RiskMAGNN (Base) vs RiskMAGNN (Large)": {
+          "n_seeds": 10,
+          "mean_diff": -2.2013561486336135,
+          "std_diff": 5.428574284827986,
+          "ci95_low": -6.084724252860076,
+          "ci95_high": 1.6820119555928486,
+          "t_stat": -1.2823439462464608,
+          "p_paired_t": 0.23176471408663016,
+          "p_wilcoxon": 0.232421875,
+          "cohens_dz": -0.40551276138673437,
+          "significant_at_05": false
+        }
+      }
+    }
+  },
+  "Model comparison, n=5 (official HBTBD split, original run)": {
+    "seeds": [
+      0,
+      1,
+      7,
+      42,
+      123
+    ],
+    "descriptive": {
+      "SimpleHeteroGNN": {
+        "test_pr_auc": {
+          "mean": 64.70823211340601,
+          "std": 1.0325259450408577
+        },
+        "test_roc_auc": {
+          "mean": 87.18512272570999,
+          "std": 1.2859523939886832
+        },
+        "test_f1": {
+          "mean": 62.8439372784469,
+          "std": 1.2308145007076627
+        }
+      },
+      "RiskMAGNN (Base)": {
+        "test_pr_auc": {
+          "mean": 65.56412911411158,
+          "std": 1.7634705276844096
+        },
+        "test_roc_auc": {
+          "mean": 90.6209326182382,
+          "std": 0.5583855727203877
+        },
+        "test_f1": {
+          "mean": 63.43255035482484,
+          "std": 2.009498777536063
+        }
+      },
+      "RiskMAGNN (Large)": {
+        "test_pr_auc": {
+          "mean": 64.84385771690462,
+          "std": 3.074969450713019
+        },
+        "test_roc_auc": {
+          "mean": 89.54982292920272,
+          "std": 1.3922438755433448
+        },
+        "test_f1": {
+          "mean": 63.42795070701618,
+          "std": 3.4107651184476775
+        }
+      }
+    },
+    "comparisons": {
+      "test_pr_auc": {
+        "SimpleHeteroGNN vs RiskMAGNN (Base)": {
+          "n_seeds": 5,
+          "mean_diff": -0.8558970007055748,
+          "std_diff": 1.4004346628236772,
+          "ci95_low": -2.5947663033703625,
+          "ci95_high": 0.8829723019592126,
+          "t_stat": -1.3666070443136515,
+          "p_paired_t": 0.2435254008906669,
+          "p_wilcoxon": 0.3125,
+          "cohens_dz": -0.6111652499230785,
+          "significant_at_05": false
+        },
+        "SimpleHeteroGNN vs RiskMAGNN (Large)": {
+          "n_seeds": 5,
+          "mean_diff": -0.13562560349860037,
+          "std_diff": 2.9396100068221007,
+          "ci95_low": -3.7856335177291243,
+          "ci95_high": 3.514382310731923,
+          "t_stat": -0.1031660894501292,
+          "p_paired_t": 0.922796520829493,
+          "p_wilcoxon": 0.8125,
+          "cohens_dz": -0.04613727779666255,
+          "significant_at_05": false
+        },
+        "RiskMAGNN (Base) vs RiskMAGNN (Large)": {
+          "n_seeds": 5,
+          "mean_diff": 0.7202713972069745,
+          "std_diff": 2.418319469333029,
+          "ci95_low": -2.2824688240190794,
+          "ci95_high": 3.723011618433028,
+          "t_stat": 0.6659896787117803,
+          "p_paired_t": 0.5418600034701426,
+          "p_wilcoxon": 0.8125,
+          "cohens_dz": 0.2978396387825571,
+          "significant_at_05": false
+        }
+      },
+      "test_roc_auc": {
+        "SimpleHeteroGNN vs RiskMAGNN (Base)": {
+          "n_seeds": 5,
+          "mean_diff": -3.4358098925282237,
+          "std_diff": 1.502638391607715,
+          "ci95_low": -5.301581885706333,
+          "ci95_high": -1.5700378993501147,
+          "t_stat": -5.112809921779926,
+          "p_paired_t": 0.0069206257042505204,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": -2.2865181082270594,
+          "significant_at_05": true
+        },
+        "SimpleHeteroGNN vs RiskMAGNN (Large)": {
+          "n_seeds": 5,
+          "mean_diff": -2.3647002034927285,
+          "std_diff": 1.5881495491193371,
+          "ci95_low": -4.33664832239775,
+          "ci95_high": -0.3927520845877073,
+          "t_stat": -3.329428519089673,
+          "p_paired_t": 0.029121168566671657,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": -1.4889656989821929,
+          "significant_at_05": true
+        },
+        "RiskMAGNN (Base) vs RiskMAGNN (Large)": {
+          "n_seeds": 5,
+          "mean_diff": 1.0711096890354952,
+          "std_diff": 1.3701027853912555,
+          "ci95_low": -0.6300976134235248,
+          "ci95_high": 2.772316991494515,
+          "t_stat": 1.7480981000692408,
+          "p_paired_t": 0.15536096925912654,
+          "p_wilcoxon": 0.125,
+          "cohens_dz": 0.7817732366186104,
+          "significant_at_05": false
+        }
+      },
+      "test_f1": {
+        "SimpleHeteroGNN vs RiskMAGNN (Base)": {
+          "n_seeds": 5,
+          "mean_diff": -0.5886130763779434,
+          "std_diff": 2.2039245424858507,
+          "ci95_low": -3.325146835540326,
+          "ci95_high": 2.1479206827844397,
+          "t_stat": -0.5971977832516047,
+          "p_paired_t": 0.5825371152087454,
+          "p_wilcoxon": 0.8125,
+          "cohens_dz": -0.2670749678725547,
+          "significant_at_05": false
+        },
+        "SimpleHeteroGNN vs RiskMAGNN (Large)": {
+          "n_seeds": 5,
+          "mean_diff": -0.5840134285692926,
+          "std_diff": 4.346617453130215,
+          "ci95_low": -5.981051834085219,
+          "ci95_high": 4.813024976946633,
+          "t_stat": -0.30043907478290205,
+          "p_paired_t": 0.7788099652620126,
+          "p_wilcoxon": 0.8125,
+          "cohens_dz": -0.13436043886234236,
+          "significant_at_05": false
+        },
+        "RiskMAGNN (Base) vs RiskMAGNN (Large)": {
+          "n_seeds": 5,
+          "mean_diff": 0.004599647808650786,
+          "std_diff": 3.2875047232169265,
+          "ci95_low": -4.077376610934636,
+          "ci95_high": 4.086575906551938,
+          "t_stat": 0.0031285506907612246,
+          "p_paired_t": 0.9976535917665607,
+          "p_wilcoxon": 0.8125,
+          "cohens_dz": 0.0013991304031192042,
+          "significant_at_05": false
+        }
+      }
+    }
+  },
+  "Component ablation (RiskMAGNN Base skeleton, 2x2 design)": {
+    "seeds": [
+      0,
+      1,
+      7,
+      11,
+      21,
+      42,
+      77,
+      123,
+      2024,
+      31337
+    ],
+    "descriptive": {
+      "Full (TransE + RiskBias)": {
+        "test_pr_auc": {
+          "mean": 63.49670400804278,
+          "std": 6.77581962992317
+        },
+        "test_roc_auc": {
+          "mean": 89.9520073680133,
+          "std": 1.041271317293043
+        },
+        "test_f1": {
+          "mean": 62.32515144224876,
+          "std": 3.7163258145022167
+        }
+      },
+      "-TransE": {
+        "test_pr_auc": {
+          "mean": 61.537150085392206,
+          "std": 10.177266825590623
+        },
+        "test_roc_auc": {
+          "mean": 90.51314475183015,
+          "std": 1.0276390147252303
+        },
+        "test_f1": {
+          "mean": 61.7732620926796,
+          "std": 4.217046446925257
+        }
+      },
+      "-RiskBias": {
+        "test_pr_auc": {
+          "mean": 62.60895268474773,
+          "std": 3.2024085876640305
+        },
+        "test_roc_auc": {
+          "mean": 90.4566928671797,
+          "std": 0.47291158208375256
+        },
+        "test_f1": {
+          "mean": 61.944221418601174,
+          "std": 2.789036745724166
+        }
+      },
+      "-Both": {
+        "test_pr_auc": {
+          "mean": 60.77269653701508,
+          "std": 4.041141673088077
+        },
+        "test_roc_auc": {
+          "mean": 89.74845747043118,
+          "std": 0.5285060344734898
+        },
+        "test_f1": {
+          "mean": 60.616434776690674,
+          "std": 3.270888679721673
+        }
+      }
+    },
+    "comparisons": {
+      "test_pr_auc": {
+        "Full (TransE + RiskBias) vs -TransE": {
+          "n_seeds": 10,
+          "mean_diff": 1.9595539226505791,
+          "std_diff": 12.988567834942101,
+          "ci95_low": -7.331907776743698,
+          "ci95_high": 11.251015622044857,
+          "t_stat": 0.47708520848795066,
+          "p_paired_t": 0.6446730733851619,
+          "p_wilcoxon": 0.625,
+          "cohens_dz": 0.15086758967982203,
+          "significant_at_05": false
+        },
+        "Full (TransE + RiskBias) vs -RiskBias": {
+          "n_seeds": 10,
+          "mean_diff": 0.8877513232950491,
+          "std_diff": 6.834025745532251,
+          "ci95_low": -4.001016189352766,
+          "ci95_high": 5.7765188359428645,
+          "t_stat": 0.41078513338585754,
+          "p_paired_t": 0.6908381611010808,
+          "p_wilcoxon": 0.275390625,
+          "cohens_dz": 0.12990166504353853,
+          "significant_at_05": false
+        },
+        "Full (TransE + RiskBias) vs -Both": {
+          "n_seeds": 10,
+          "mean_diff": 2.724007471027697,
+          "std_diff": 3.9534234248604836,
+          "ci95_low": -0.10410127817244685,
+          "ci95_high": 5.552116220227841,
+          "t_stat": 2.1788882813802424,
+          "p_paired_t": 0.05727814097805376,
+          "p_wilcoxon": 0.083984375,
+          "cohens_dz": 0.6890249736211413,
+          "significant_at_05": false
+        },
+        "-TransE vs -RiskBias": {
+          "n_seeds": 10,
+          "mean_diff": -1.07180259935553,
+          "std_diff": 9.629926657596645,
+          "ci95_low": -7.96063713785829,
+          "ci95_high": 5.817031939147229,
+          "t_stat": -0.3519587985001616,
+          "p_paired_t": 0.7329695347973361,
+          "p_wilcoxon": 0.921875,
+          "cohens_dz": -0.11129914457967652,
+          "significant_at_05": false
+        },
+        "-TransE vs -Both": {
+          "n_seeds": 10,
+          "mean_diff": 0.7644535483771179,
+          "std_diff": 10.393197611642389,
+          "ci95_low": -6.670392138229084,
+          "ci95_high": 8.19929923498332,
+          "t_stat": 0.23259582551970687,
+          "p_paired_t": 0.8212785024354733,
+          "p_wilcoxon": 0.4921875,
+          "cohens_dz": 0.07355325828893913,
+          "significant_at_05": false
+        },
+        "-RiskBias vs -Both": {
+          "n_seeds": 10,
+          "mean_diff": 1.836256147732648,
+          "std_diff": 4.027522135214685,
+          "ci95_low": -1.0448596256428941,
+          "ci95_high": 4.717371921108191,
+          "t_stat": 1.441767816382783,
+          "p_paired_t": 0.18324451426569338,
+          "p_wilcoxon": 0.232421875,
+          "cohens_dz": 0.45592701568970206,
+          "significant_at_05": false
+        }
+      },
+      "test_roc_auc": {
+        "Full (TransE + RiskBias) vs -TransE": {
+          "n_seeds": 10,
+          "mean_diff": -0.561137383816859,
+          "std_diff": 1.3448171985141677,
+          "ci95_low": -1.5231616540420911,
+          "ci95_high": 0.4008868864083731,
+          "t_stat": -1.319489529944979,
+          "p_paired_t": 0.2195841131040966,
+          "p_wilcoxon": 0.275390625,
+          "cohens_dz": -0.41725922633710827,
+          "significant_at_05": false
+        },
+        "Full (TransE + RiskBias) vs -RiskBias": {
+          "n_seeds": 10,
+          "mean_diff": -0.5046854991663849,
+          "std_diff": 0.967137117780103,
+          "ci95_low": -1.1965337153909457,
+          "ci95_high": 0.1871627170581759,
+          "t_stat": -1.650185532210808,
+          "p_paired_t": 0.1333025686632876,
+          "p_wilcoxon": 0.232421875,
+          "cohens_dz": -0.5218344843643306,
+          "significant_at_05": false
+        },
+        "Full (TransE + RiskBias) vs -Both": {
+          "n_seeds": 10,
+          "mean_diff": 0.2035498975821227,
+          "std_diff": 0.9647730404170043,
+          "ci95_low": -0.4866071595744965,
+          "ci95_high": 0.893706954738742,
+          "t_stat": 0.6671841634124535,
+          "p_paired_t": 0.521391383359226,
+          "p_wilcoxon": 0.6953125,
+          "cohens_dz": 0.2109821575177331,
+          "significant_at_05": false
+        },
+        "-TransE vs -RiskBias": {
+          "n_seeds": 10,
+          "mean_diff": 0.056451884650473974,
+          "std_diff": 0.9254063177543714,
+          "ci95_low": -0.6055439155839989,
+          "ci95_high": 0.7184476848849469,
+          "t_stat": 0.19290611083982173,
+          "p_paired_t": 0.8513154439093209,
+          "p_wilcoxon": 1.0,
+          "cohens_dz": 0.06100226848187336,
+          "significant_at_05": false
+        },
+        "-TransE vs -Both": {
+          "n_seeds": 10,
+          "mean_diff": 0.7646872813989816,
+          "std_diff": 1.2060716590561387,
+          "ci95_low": -0.09808440900232418,
+          "ci95_high": 1.6274589718002872,
+          "t_stat": 2.0049832767609486,
+          "p_paired_t": 0.07594012452733948,
+          "p_wilcoxon": 0.037109375,
+          "cohens_dz": 0.6340313825112343,
+          "significant_at_05": false
+        },
+        "-RiskBias vs -Both": {
+          "n_seeds": 10,
+          "mean_diff": 0.7082353967485077,
+          "std_diff": 0.6937572225273754,
+          "ci95_low": 0.21195137654652257,
+          "ci95_high": 1.2045194169504927,
+          "t_stat": 3.2282719380120315,
+          "p_paired_t": 0.010351265400538703,
+          "p_wilcoxon": 0.001953125,
+          "cohens_dz": 1.0208692230523928,
+          "significant_at_05": true
+        }
+      },
+      "test_f1": {
+        "Full (TransE + RiskBias) vs -TransE": {
+          "n_seeds": 10,
+          "mean_diff": 0.5518893495691458,
+          "std_diff": 5.692659367779898,
+          "ci95_low": -3.5203938425108023,
+          "ci95_high": 4.624172541649094,
+          "t_stat": 0.306575055395945,
+          "p_paired_t": 0.7661409593622814,
+          "p_wilcoxon": 0.6953125,
+          "cohens_dz": 0.09694754488434801,
+          "significant_at_05": false
+        },
+        "Full (TransE + RiskBias) vs -RiskBias": {
+          "n_seeds": 10,
+          "mean_diff": 0.38093002364758205,
+          "std_diff": 4.4098399423923205,
+          "ci95_low": -2.7736794333680423,
+          "ci95_high": 3.535539480663206,
+          "t_stat": 0.27316331649322106,
+          "p_paired_t": 0.7908924438503504,
+          "p_wilcoxon": 0.625,
+          "cohens_dz": 0.08638182533240175,
+          "significant_at_05": false
+        },
+        "Full (TransE + RiskBias) vs -Both": {
+          "n_seeds": 10,
+          "mean_diff": 1.7087166655580746,
+          "std_diff": 2.996544063846844,
+          "ci95_low": -0.43488182456016555,
+          "ci95_high": 3.8523151556763144,
+          "t_stat": 1.8032227872914997,
+          "p_paired_t": 0.10485437026624961,
+          "p_wilcoxon": 0.10546875,
+          "cohens_dz": 0.5702291136558466,
+          "significant_at_05": false
+        },
+        "-TransE vs -RiskBias": {
+          "n_seeds": 10,
+          "mean_diff": -0.17095932592156374,
+          "std_diff": 5.208117060942551,
+          "ci95_low": -3.8966218325704585,
+          "ci95_high": 3.554703180727331,
+          "t_stat": -0.10380351494276241,
+          "p_paired_t": 0.9196016264761004,
+          "p_wilcoxon": 1.0,
+          "cohens_dz": -0.03282555363504521,
+          "significant_at_05": false
+        },
+        "-TransE vs -Both": {
+          "n_seeds": 10,
+          "mean_diff": 1.1568273159889286,
+          "std_diff": 4.882746355744927,
+          "ci95_low": -2.336079009696301,
+          "ci95_high": 4.649733641674159,
+          "t_stat": 0.7492113887341642,
+          "p_paired_t": 0.4728565620732547,
+          "p_wilcoxon": 0.232421875,
+          "cohens_dz": 0.23692144373377746,
+          "significant_at_05": false
+        },
+        "-RiskBias vs -Both": {
+          "n_seeds": 10,
+          "mean_diff": 1.3277866419104924,
+          "std_diff": 4.106086306763284,
+          "ci95_low": -1.6095305541442038,
+          "ci95_high": 4.265103837965189,
+          "t_stat": 1.0225868921136647,
+          "p_paired_t": 0.3332024034521555,
+          "p_wilcoxon": 0.4921875,
+          "cohens_dz": 0.3233703684512055,
+          "significant_at_05": false
+        }
+      }
+    }
+  },
+  "Elliptic chronological split (homogeneous models + temporal ablation)": {
+    "seeds": [
+      0,
+      1,
+      7,
+      42,
+      123
+    ],
+    "descriptive": {
+      "LogisticRegression": {
+        "test_pr_auc": {
+          "mean": 16.213670982848182,
+          "std": 0.0
+        },
+        "test_roc_auc": {
+          "mean": 82.43520784291279,
+          "std": 0.0
+        },
+        "test_f1": {
+          "mean": 20.020429009193055,
+          "std": 0.0
+        }
+      },
+      "StaticGraphSAGE": {
+        "test_pr_auc": {
+          "mean": 53.77274444612914,
+          "std": 0.9825049388473323
+        },
+        "test_roc_auc": {
+          "mean": 81.74840292833241,
+          "std": 0.38064894611842315
+        },
+        "test_f1": {
+          "mean": 22.06943039230068,
+          "std": 2.734979610756848
+        }
+      },
+      "TemporalGNN": {
+        "test_pr_auc": {
+          "mean": 52.141792506316804,
+          "std": 1.7868158195975545
+        },
+        "test_roc_auc": {
+          "mean": 81.5926146540642,
+          "std": 0.9775218692170204
+        },
+        "test_f1": {
+          "mean": 22.07840907340534,
+          "std": 2.684289733084913
+        }
+      },
+      "TemporalGNN (no skip)": {
+        "test_pr_auc": {
+          "mean": 43.38710588894103,
+          "std": 4.640519145007315
+        },
+        "test_roc_auc": {
+          "mean": 81.61501151966573,
+          "std": 0.8007374410136675
+        },
+        "test_f1": {
+          "mean": 16.81443194717724,
+          "std": 1.7116332059647075
+        }
+      },
+      "No temporal (no skip)": {
+        "test_pr_auc": {
+          "mean": 38.91775330197275,
+          "std": 6.955953819329706
+        },
+        "test_roc_auc": {
+          "mean": 79.24136412637763,
+          "std": 1.4909547457832595
+        },
+        "test_f1": {
+          "mean": 16.149958119378788,
+          "std": 1.9210748746463302
+        }
+      }
+    },
+    "comparisons": {
+      "test_pr_auc": {
+        "LogisticRegression vs StaticGraphSAGE": {
+          "n_seeds": 5,
+          "mean_diff": -37.55907346328096,
+          "std_diff": 0.9825049388473308,
+          "ci95_low": -38.77901447390508,
+          "ci95_high": -36.33913245265684,
+          "t_stat": -85.48012138680441,
+          "p_paired_t": 1.1227797966961925e-07,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": -38.22787242916565,
+          "significant_at_05": true
+        },
+        "LogisticRegression vs TemporalGNN": {
+          "n_seeds": 5,
+          "mean_diff": -35.92812152346862,
+          "std_diff": 1.7868158195975508,
+          "ci95_low": -38.14674639808385,
+          "ci95_high": -33.70949664885339,
+          "t_stat": -44.961389500370444,
+          "p_paired_t": 1.4633946954643572e-06,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": -20.107344657134725,
+          "significant_at_05": true
+        },
+        "LogisticRegression vs TemporalGNN (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": -27.173434906092844,
+          "std_diff": 4.640519145007315,
+          "ci95_low": -32.93540046142374,
+          "ci95_high": -21.411469350761948,
+          "t_stat": -13.093717692677126,
+          "p_paired_t": 0.0001964254477893277,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": -5.8556885678035515,
+          "significant_at_05": true
+        },
+        "LogisticRegression vs No temporal (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": -22.70408231912457,
+          "std_diff": 6.955953819329706,
+          "ci95_low": -31.341039749754238,
+          "ci95_high": -14.067124888494904,
+          "t_stat": -7.298477354929555,
+          "p_paired_t": 0.0018738433925755357,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": -3.263978299573069,
+          "significant_at_05": true
+        },
+        "StaticGraphSAGE vs TemporalGNN": {
+          "n_seeds": 5,
+          "mean_diff": 1.6309519398123342,
+          "std_diff": 2.588980790787655,
+          "ci95_low": -1.5836923001498087,
+          "ci95_high": 4.845596179774477,
+          "t_stat": 1.408631310990148,
+          "p_paired_t": 0.23172394376992075,
+          "p_wilcoxon": 0.3125,
+          "cohens_dz": 0.6299590733217235,
+          "significant_at_05": false
+        },
+        "StaticGraphSAGE vs TemporalGNN (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 10.385638557188114,
+          "std_diff": 4.495714526104055,
+          "ci95_low": 4.803471683923013,
+          "ci95_high": 15.967805430453215,
+          "t_stat": 5.165584618145292,
+          "p_paired_t": 0.0066722610010168295,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": 2.3101196699400335,
+          "significant_at_05": true
+        },
+        "StaticGraphSAGE vs No temporal (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 14.854991144156386,
+          "std_diff": 6.627511217594465,
+          "ci95_low": 6.625849067577745,
+          "ci95_high": 23.084133220735026,
+          "t_stat": 5.011952286901973,
+          "p_paired_t": 0.007427420462138065,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": 2.241413202699668,
+          "significant_at_05": true
+        },
+        "TemporalGNN vs TemporalGNN (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 8.75468661737578,
+          "std_diff": 5.357711925436627,
+          "ci95_low": 2.102208606814151,
+          "ci95_high": 15.407164627937409,
+          "t_stat": 3.653812424146821,
+          "p_paired_t": 0.021698352410900977,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": 1.6340345914851173,
+          "significant_at_05": true
+        },
+        "TemporalGNN vs No temporal (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 13.224039204344052,
+          "std_diff": 7.979604953330005,
+          "ci95_low": 3.316051013905758,
+          "ci95_high": 23.132027394782348,
+          "t_stat": 3.7056785105252117,
+          "p_paired_t": 0.020732191971241754,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": 1.6572298104589085,
+          "significant_at_05": true
+        },
+        "TemporalGNN (no skip) vs No temporal (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 4.469352586968272,
+          "std_diff": 9.861512472432683,
+          "ci95_low": -7.77533241788878,
+          "ci95_high": 16.714037591825324,
+          "t_stat": 1.0134121137921441,
+          "p_paired_t": 0.3681813543600782,
+          "p_wilcoxon": 0.4375,
+          "cohens_dz": 0.45321167513219723,
+          "significant_at_05": false
+        }
+      },
+      "test_roc_auc": {
+        "LogisticRegression vs StaticGraphSAGE": {
+          "n_seeds": 5,
+          "mean_diff": 0.6868049145803752,
+          "std_diff": 0.38064894611842315,
+          "ci95_low": 0.21416682223092476,
+          "ci95_high": 1.1594430069298256,
+          "t_stat": 4.034537575745377,
+          "p_paired_t": 0.015674616757562036,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": 1.8043000554287738,
+          "significant_at_05": true
+        },
+        "LogisticRegression vs TemporalGNN": {
+          "n_seeds": 5,
+          "mean_diff": 0.8425931888485906,
+          "std_diff": 0.9775218692170204,
+          "ci95_low": -0.37116052361503205,
+          "ci95_high": 2.0563469013122133,
+          "t_stat": 1.9274204567442537,
+          "p_paired_t": 0.1261892659190171,
+          "p_wilcoxon": 0.125,
+          "cohens_dz": 0.8619686325007689,
+          "significant_at_05": false
+        },
+        "LogisticRegression vs TemporalGNN (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 0.8201963232470746,
+          "std_diff": 0.8007374410136675,
+          "ci95_low": -0.17405052927340658,
+          "ci95_high": 1.8144431757675559,
+          "t_stat": 2.2904071169123035,
+          "p_paired_t": 0.08381948319568158,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": 1.0243012019130437,
+          "significant_at_05": false
+        },
+        "LogisticRegression vs No temporal (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 3.1938437165351474,
+          "std_diff": 1.4909547457832595,
+          "ci95_low": 1.342578885745029,
+          "ci95_high": 5.045108547325266,
+          "t_stat": 4.789985531003731,
+          "p_paired_t": 0.008711653833222695,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": 2.1421466517129537,
+          "significant_at_05": true
+        },
+        "StaticGraphSAGE vs TemporalGNN": {
+          "n_seeds": 5,
+          "mean_diff": 0.15578827426821534,
+          "std_diff": 0.9842005888621367,
+          "ci95_low": -1.0662581639328443,
+          "ci95_high": 1.377834712469275,
+          "t_stat": 0.35394529865487295,
+          "p_paired_t": 0.7412489121137673,
+          "p_wilcoxon": 1.0,
+          "cohens_dz": 0.15828914962175217,
+          "significant_at_05": false
+        },
+        "StaticGraphSAGE vs TemporalGNN (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 0.13339140866669935,
+          "std_diff": 0.810604687031682,
+          "ci95_low": -0.8731072479957698,
+          "ci95_high": 1.1398900653291686,
+          "t_stat": 0.36796266067178135,
+          "p_paired_t": 0.7315455241055854,
+          "p_wilcoxon": 0.8125,
+          "cohens_dz": 0.16455790448875832,
+          "significant_at_05": false
+        },
+        "StaticGraphSAGE vs No temporal (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 2.507038801954772,
+          "std_diff": 1.8031487835753173,
+          "ci95_low": 0.2681338739843899,
+          "ci95_high": 4.745943729925154,
+          "t_stat": 3.1089554197990257,
+          "p_paired_t": 0.03590818626682517,
+          "p_wilcoxon": 0.125,
+          "cohens_dz": 1.3903671315374033,
+          "significant_at_05": true
+        },
+        "TemporalGNN vs TemporalGNN (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": -0.02239686560151597,
+          "std_diff": 0.9592927908944991,
+          "ci95_low": -1.2135161877916272,
+          "ci95_high": 1.1687224565885954,
+          "t_stat": -0.05220607768897975,
+          "p_paired_t": 0.960867658079096,
+          "p_wilcoxon": 1.0,
+          "cohens_dz": -0.02334726771023877,
+          "significant_at_05": false
+        },
+        "TemporalGNN vs No temporal (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 2.351250527686557,
+          "std_diff": 1.7956542077395747,
+          "ci95_low": 0.12165134471322414,
+          "ci95_high": 4.58084971065989,
+          "t_stat": 2.9279334458596944,
+          "p_paired_t": 0.042902193659406014,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": 1.3094116437074954,
+          "significant_at_05": true
+        },
+        "TemporalGNN (no skip) vs No temporal (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 2.373647393288073,
+          "std_diff": 1.5609582867226637,
+          "ci95_low": 0.43546168596671264,
+          "ci95_high": 4.311833100609433,
+          "t_stat": 3.4002426401483463,
+          "p_paired_t": 0.02727122864498908,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": 1.5206347366730115,
+          "significant_at_05": true
+        }
+      },
+      "test_f1": {
+        "LogisticRegression vs StaticGraphSAGE": {
+          "n_seeds": 5,
+          "mean_diff": -2.0490013831076275,
+          "std_diff": 2.734979610756848,
+          "ci95_low": -5.444927101605749,
+          "ci95_high": 1.3469243353904945,
+          "t_stat": -1.6752250585706758,
+          "p_paired_t": 0.16920028155361186,
+          "p_wilcoxon": 0.3125,
+          "cohens_dz": -0.7491834217150195,
+          "significant_at_05": false
+        },
+        "LogisticRegression vs TemporalGNN": {
+          "n_seeds": 5,
+          "mean_diff": -2.0579800642122805,
+          "std_diff": 2.6842897330849134,
+          "ci95_low": -5.390965986531809,
+          "ci95_high": 1.2750058581072476,
+          "t_stat": -1.7143392768669026,
+          "p_paired_t": 0.16161744796433428,
+          "p_wilcoxon": 0.125,
+          "cohens_dz": -0.7666758319144454,
+          "significant_at_05": false
+        },
+        "LogisticRegression vs TemporalGNN (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 3.2059970620158125,
+          "std_diff": 1.7116332059647075,
+          "ci95_low": 1.0807237320393472,
+          "ci95_high": 5.331270391992278,
+          "t_stat": 4.188296500295742,
+          "p_paired_t": 0.01382548458756424,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": 1.8730631369171495,
+          "significant_at_05": true
+        },
+        "LogisticRegression vs No temporal (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 3.8704708898142712,
+          "std_diff": 1.9210748746463304,
+          "ci95_low": 1.4851413801121138,
+          "ci95_high": 6.255800399516429,
+          "t_stat": 4.505100831195935,
+          "p_paired_t": 0.010780376364718982,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": 2.014742340808983,
+          "significant_at_05": true
+        },
+        "StaticGraphSAGE vs TemporalGNN": {
+          "n_seeds": 5,
+          "mean_diff": -0.008978681104652964,
+          "std_diff": 2.665863061949634,
+          "ci95_low": -3.3190848692687647,
+          "ci95_high": 3.3011275070594586,
+          "t_stat": -0.00753112250394962,
+          "p_paired_t": 0.9943517248630358,
+          "p_wilcoxon": 1.0,
+          "cohens_dz": -0.003368020373141956,
+          "significant_at_05": false
+        },
+        "StaticGraphSAGE vs TemporalGNN (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 5.254998445123439,
+          "std_diff": 3.678169121147229,
+          "ci95_low": 0.6879482680901452,
+          "ci95_high": 9.822048622156732,
+          "t_stat": 3.194669238397252,
+          "p_paired_t": 0.03306850830811423,
+          "p_wilcoxon": 0.125,
+          "cohens_dz": 1.4286995165367473,
+          "significant_at_05": true
+        },
+        "StaticGraphSAGE vs No temporal (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 5.919472272921899,
+          "std_diff": 2.550246286239626,
+          "ci95_low": 2.7529232727453046,
+          "ci95_high": 9.086021273098494,
+          "t_stat": 5.190221220827941,
+          "p_paired_t": 0.006560046760309961,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": 2.3211374936066447,
+          "significant_at_05": true
+        },
+        "TemporalGNN vs TemporalGNN (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 5.263977126228093,
+          "std_diff": 2.1396766843898405,
+          "ci95_low": 2.6072176194252306,
+          "ci95_high": 7.920736633030956,
+          "t_stat": 5.501116487422289,
+          "p_paired_t": 0.005324227037937958,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": 2.4601740836042207,
+          "significant_at_05": true
+        },
+        "TemporalGNN vs No temporal (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 5.928450954026552,
+          "std_diff": 2.6503167470366025,
+          "ci95_low": 2.6376480653946897,
+          "ci95_high": 9.219253842658414,
+          "t_stat": 5.001824536368812,
+          "p_paired_t": 0.007480772765184076,
+          "p_wilcoxon": 0.0625,
+          "cohens_dz": 2.236883934969406,
+          "significant_at_05": true
+        },
+        "TemporalGNN (no skip) vs No temporal (no skip)": {
+          "n_seeds": 5,
+          "mean_diff": 0.664473827798459,
+          "std_diff": 2.495407068045513,
+          "ci95_low": -2.433983289456865,
+          "ci95_high": 3.7629309450537827,
+          "t_stat": 0.5954173438286281,
+          "p_paired_t": 0.5836163669363087,
+          "p_wilcoxon": 1.0,
+          "cohens_dz": 0.2662787311566354,
+          "significant_at_05": false
+        }
+      }
+    }
+  }
+}

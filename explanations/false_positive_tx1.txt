@@ -1,0 +1,40 @@
+======================================================================
+  TRANSACTION EXPLANATION REPORT
+======================================================================
+
+Transaction ID: 1
+Actual Label: LICIT
+Model Prediction: ILLICIT
+Confidence: 66.58%
+
+----------------------------------------------------------------------
+IMPORTANT NEIGHBORS (by Metapath)
+----------------------------------------------------------------------
+
+M1: Centralized Transfer (Tx -> Add <- Tx)
+  Top 5 most influential neighbors:
+    1. Tx_2 (importance: 0.202)
+    2. Tx_1 (importance: 0.202)
+    3. Tx_602 (importance: 0.201)
+    4. Tx_1129 (importance: 0.201)
+    5. Tx_1276 (importance: 0.201)
+
+M2: One-Way Flow (Tx -> Add -> Tx)
+  Top 2 most influential neighbors:
+    1. Tx_1 (importance: 0.321)
+    2. Tx_2 (importance: 0.193)
+
+M3: Decentralized Transfer (Tx <- Add -> Tx)
+  No neighbors found
+
+----------------------------------------------------------------------
+IMPORTANT FEATURES
+----------------------------------------------------------------------
+  Top 5 most influential features:
+    1. Feature_137 (importance: 0.842)
+    2. Feature_28 (importance: 0.842)
+    3. Feature_61 (importance: 0.836)
+    4. Feature_79 (importance: 0.814)
+    5. Feature_164 (importance: 0.802)
+
+======================================================================

@@ -1,0 +1,5 @@
+Model,Test PR-AUC,Type,Improvement vs LR
+Logistic Regression,0.16838005313457463,Baseline,0.0
+Static GraphSAGE,0.4869928825911399,Static,189.2
+Absolute Temporal GNN,0.5552530667776893,Temporal,229.8
+Relative Temporal GNN,0.5047288516485436,Relative,199.8

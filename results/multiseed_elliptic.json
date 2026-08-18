@@ -1,0 +1,279 @@
+{
+  "seeds": [
+    0,
+    1,
+    7,
+    42,
+    123
+  ],
+  "epochs": 300,
+  "per_run": [
+    {
+      "test_pr_auc": 0.16213670982848183,
+      "test_roc_auc": 0.8243520784291279,
+      "test_f1": 0.20020429009193055,
+      "variant": "LogisticRegression",
+      "seed": 0
+    },
+    {
+      "test_pr_auc": 0.16213670982848183,
+      "test_roc_auc": 0.8243520784291279,
+      "test_f1": 0.20020429009193055,
+      "variant": "LogisticRegression",
+      "seed": 1
+    },
+    {
+      "test_pr_auc": 0.16213670982848183,
+      "test_roc_auc": 0.8243520784291279,
+      "test_f1": 0.20020429009193055,
+      "variant": "LogisticRegression",
+      "seed": 7
+    },
+    {
+      "test_pr_auc": 0.16213670982848183,
+      "test_roc_auc": 0.8243520784291279,
+      "test_f1": 0.20020429009193055,
+      "variant": "LogisticRegression",
+      "seed": 42
+    },
+    {
+      "test_pr_auc": 0.16213670982848183,
+      "test_roc_auc": 0.8243520784291279,
+      "test_f1": 0.20020429009193055,
+      "variant": "LogisticRegression",
+      "seed": 123
+    },
+    {
+      "test_pr_auc": 0.5430590139534959,
+      "test_roc_auc": 0.8198345449255038,
+      "test_f1": 0.22120481927710844,
+      "val_pr_auc": 0.8423045166328612,
+      "variant": "StaticGraphSAGE",
+      "seed": 0
+    },
+    {
+      "test_pr_auc": 0.5492508077640293,
+      "test_roc_auc": 0.8172382972836961,
+      "test_f1": 0.21357012750455373,
+      "val_pr_auc": 0.8404402306990096,
+      "variant": "StaticGraphSAGE",
+      "seed": 1
+    },
+    {
+      "test_pr_auc": 0.5238976447305778,
+      "test_roc_auc": 0.8217324277397366,
+      "test_f1": 0.17894561782803925,
+      "val_pr_auc": 0.8435151486127457,
+      "variant": "StaticGraphSAGE",
+      "seed": 7
+    },
+    {
+      "test_pr_auc": 0.5324021511315377,
+      "test_roc_auc": 0.8116483228511531,
+      "test_f1": 0.24109263657957244,
+      "val_pr_auc": 0.8558126119906202,
+      "variant": "StaticGraphSAGE",
+      "seed": 42
+    },
+    {
+      "test_pr_auc": 0.5400276047268163,
+      "test_roc_auc": 0.816966553616531,
+      "test_f1": 0.24865831842576028,
+      "val_pr_auc": 0.8458022575093621,
+      "variant": "StaticGraphSAGE",
+      "seed": 123
+    },
+    {
+      "test_pr_auc": 0.505440854191814,
+      "test_roc_auc": 0.8151129428095104,
+      "test_f1": 0.2161060142711519,
+      "val_pr_auc": 0.8536944729825816,
+      "variant": "TemporalGNN",
+      "seed": 0
+    },
+    {
+      "test_pr_auc": 0.4997900641347608,
+      "test_roc_auc": 0.8005620607083997,
+      "test_f1": 0.18998272884283246,
+      "val_pr_auc": 0.8068717975756665,
+      "variant": "TemporalGNN",
+      "seed": 1
+    },
+    {
+      "test_pr_auc": 0.5349178845992735,
+      "test_roc_auc": 0.827278055633069,
+      "test_f1": 0.21174831669375435,
+      "val_pr_auc": 0.8235428371253855,
+      "variant": "TemporalGNN",
+      "seed": 7
+    },
+    {
+      "test_pr_auc": 0.5270954839049581,
+      "test_roc_auc": 0.8199192132759973,
+      "test_f1": 0.26352472618652506,
+      "val_pr_auc": 0.8336494402642869,
+      "variant": "TemporalGNN",
+      "seed": 42
+    },
+    {
+      "test_pr_auc": 0.5398453384850339,
+      "test_roc_auc": 0.8167584602762334,
+      "test_f1": 0.22255866767600302,
+      "val_pr_auc": 0.8435116324941008,
+      "variant": "TemporalGNN",
+      "seed": 123
+    },
+    {
+      "test_pr_auc": 0.4304867680174532,
+      "test_roc_auc": 0.8198060737020103,
+      "test_f1": 0.16671541386370284,
+      "val_pr_auc": 0.7550111198325398,
+      "variant": "TemporalGNN (no skip)",
+      "seed": 0
+    },
+    {
+      "test_pr_auc": 0.4768955320853112,
+      "test_roc_auc": 0.8132755054462022,
+      "test_f1": 0.14557587740978745,
+      "val_pr_auc": 0.7746389652817034,
+      "variant": "TemporalGNN (no skip)",
+      "seed": 1
+    },
+    {
+      "test_pr_auc": 0.46528669404193135,
+      "test_roc_auc": 0.8239631704600473,
+      "test_f1": 0.18748866727107888,
+      "val_pr_auc": 0.8035578900911291,
+      "variant": "TemporalGNN (no skip)",
+      "seed": 7
+    },
+    {
+      "test_pr_auc": 0.3580951581210138,
+      "test_roc_auc": 0.8201253687843294,
+      "test_f1": 0.18220687386942938,
+      "val_pr_auc": 0.7767191544601516,
+      "variant": "TemporalGNN (no skip)",
+      "seed": 42
+    },
+    {
+      "test_pr_auc": 0.43859114218134154,
+      "test_roc_auc": 0.8035804575906965,
+      "test_f1": 0.1587347649448636,
+      "val_pr_auc": 0.8105003763023414,
+      "variant": "TemporalGNN (no skip)",
+      "seed": 123
+    },
+    {
+      "test_pr_auc": 0.3601075373844761,
+      "test_roc_auc": 0.774687606580758,
+      "test_f1": 0.1909526787575568,
+      "val_pr_auc": 0.7012238011247267,
+      "variant": "No temporal (no skip)",
+      "seed": 0
+    },
+    {
+      "test_pr_auc": 0.4578759290154301,
+      "test_roc_auc": 0.7977130005270903,
+      "test_f1": 0.14588893124920574,
+      "val_pr_auc": 0.7807290500855479,
+      "variant": "No temporal (no skip)",
+      "seed": 1
+    },
+    {
+      "test_pr_auc": 0.3179386521353683,
+      "test_roc_auc": 0.790303625474918,
+      "test_f1": 0.14367188448003884,
+      "val_pr_auc": 0.7429054767518106,
+      "variant": "No temporal (no skip)",
+      "seed": 7
+    },
+    {
+      "test_pr_auc": 0.46907252974443847,
+      "test_roc_auc": 0.8144598934371295,
+      "test_f1": 0.16792313377679233,
+      "val_pr_auc": 0.8196568959574975,
+      "variant": "No temporal (no skip)",
+      "seed": 42
+    },
+    {
+      "test_pr_auc": 0.3408930168189245,
+      "test_roc_auc": 0.7849040802989865,
+      "test_f1": 0.1590612777053455,
+      "val_pr_auc": 0.7354657703316159,
+      "variant": "No temporal (no skip)",
+      "seed": 123
+    }
+  ],
+  "summary": {
+    "LogisticRegression": {
+      "test_pr_auc": {
+        "mean": 0.16213670982848183,
+        "std": 0.0
+      },
+      "test_roc_auc": {
+        "mean": 0.8243520784291279,
+        "std": 0.0
+      },
+      "test_f1": {
+        "mean": 0.20020429009193058,
+        "std": 3.1031676915590914e-17
+      }
+    },
+    "StaticGraphSAGE": {
+      "test_pr_auc": {
+        "mean": 0.5377274444612914,
+        "std": 0.009825049388473315
+      },
+      "test_roc_auc": {
+        "mean": 0.8174840292833242,
+        "std": 0.003806489461184226
+      },
+      "test_f1": {
+        "mean": 0.22069430392300685,
+        "std": 0.02734979610756848
+      }
+    },
+    "TemporalGNN": {
+      "test_pr_auc": {
+        "mean": 0.5214179250631681,
+        "std": 0.017868158195975536
+      },
+      "test_roc_auc": {
+        "mean": 0.815926146540642,
+        "std": 0.009775218692170205
+      },
+      "test_f1": {
+        "mean": 0.22078409073405333,
+        "std": 0.02684289733084913
+      }
+    },
+    "TemporalGNN (no skip)": {
+      "test_pr_auc": {
+        "mean": 0.43387105888941024,
+        "std": 0.04640519145007316
+      },
+      "test_roc_auc": {
+        "mean": 0.816150115196657,
+        "std": 0.008007374410136702
+      },
+      "test_f1": {
+        "mean": 0.16814431947177244,
+        "std": 0.017116332059647077
+      }
+    },
+    "No temporal (no skip)": {
+      "test_pr_auc": {
+        "mean": 0.38917753301972746,
+        "std": 0.06955953819329706
+      },
+      "test_roc_auc": {
+        "mean": 0.7924136412637764,
+        "std": 0.01490954745783259
+      },
+      "test_f1": {
+        "mean": 0.16149958119378785,
+        "std": 0.0192107487464633
+      }
+    }
+  }
+}

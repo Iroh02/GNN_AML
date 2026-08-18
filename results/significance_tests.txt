@@ -1,0 +1,188 @@
+STATISTICAL SIGNIFICANCE ANALYSIS -- RiskMAGNN on HBTBD
+
+All tests are PAIRED across seeds: each model is trained on the same
+5 seeds over identical data, so seed i is a matched observation.
+
+NOTE on Wilcoxon signed-rank: with n=5 matched pairs the minimum
+attainable two-sided p-value is 2/2^5 = 0.0625. A Wilcoxon test can
+therefore never reach p<0.05 here; it is reported in the JSON for
+completeness but the paired t-test and the 95% CI are the informative
+statistics at this sample size.
+
+==============================================================================
+  Model comparison, n=10 (official HBTBD split, extended seeds)
+  Matched seeds: [0, 1, 7, 11, 21, 42, 77, 123, 2024, 31337]  (n=10)
+==============================================================================
+
+  Descriptive statistics (mean +/- sample std, %)
+  --------------------------------------------------------------------------
+  Model                                PR-AUC        ROC-AUC             F1
+  SimpleHeteroGNN                64.80+/-1.22   87.62+/-1.20   63.24+/-1.82
+  RiskMAGNN (Base)               63.50+/-6.78   89.95+/-1.04   62.33+/-3.72
+  RiskMAGNN (Large)              66.83+/-4.04   90.15+/-1.38   64.53+/-3.22
+
+  Paired comparisons on PR-AUC (percentage points)
+  --------------------------------------------------------------------------
+  Comparison (A - B)                            diff            95% CI     p(t)
+  SimpleHeteroGNN - RiskMAGNN (Base)           +1.30    [-3.56, +6.16]   0.5602
+  SimpleHeteroGNN - RiskMAGNN (Large)          -2.03    [-4.54, +0.47]   0.0991
+  RiskMAGNN (Base) - RiskMAGNN (Large)         -3.33    [-9.89, +3.23]   0.2801
+  (* = significant at alpha=0.05, paired two-sided t-test)
+
+  Paired comparisons on ROC-AUC (percentage points)
+  --------------------------------------------------------------------------
+  Comparison (A - B)                            diff            95% CI     p(t)
+  SimpleHeteroGNN - RiskMAGNN (Base)           -2.33    [-3.54, -1.12]   0.0019 *
+  SimpleHeteroGNN - RiskMAGNN (Large)          -2.53    [-3.85, -1.21]   0.0019 *
+  RiskMAGNN (Base) - RiskMAGNN (Large)         -0.20    [-1.63, +1.23]   0.7569
+  (* = significant at alpha=0.05, paired two-sided t-test)
+
+  Paired comparisons on F1 (percentage points)
+  --------------------------------------------------------------------------
+  Comparison (A - B)                            diff            95% CI     p(t)
+  SimpleHeteroGNN - RiskMAGNN (Base)           +0.91    [-1.65, +3.47]   0.4411
+  SimpleHeteroGNN - RiskMAGNN (Large)          -1.29    [-3.72, +1.14]   0.2606
+  RiskMAGNN (Base) - RiskMAGNN (Large)         -2.20    [-6.08, +1.68]   0.2318
+  (* = significant at alpha=0.05, paired two-sided t-test)
+
+==============================================================================
+  Model comparison, n=5 (official HBTBD split, original run)
+  Matched seeds: [0, 1, 7, 42, 123]  (n=5)
+==============================================================================
+
+  Descriptive statistics (mean +/- sample std, %)
+  --------------------------------------------------------------------------
+  Model                                PR-AUC        ROC-AUC             F1
+  SimpleHeteroGNN                64.71+/-1.03   87.19+/-1.29   62.84+/-1.23
+  RiskMAGNN (Base)               65.56+/-1.76   90.62+/-0.56   63.43+/-2.01
+  RiskMAGNN (Large)              64.84+/-3.07   89.55+/-1.39   63.43+/-3.41
+
+  Paired comparisons on PR-AUC (percentage points)
+  --------------------------------------------------------------------------
+  Comparison (A - B)                            diff            95% CI     p(t)
+  SimpleHeteroGNN - RiskMAGNN (Base)           -0.86    [-2.59, +0.88]   0.2435
+  SimpleHeteroGNN - RiskMAGNN (Large)          -0.14    [-3.79, +3.51]   0.9228
+  RiskMAGNN (Base) - RiskMAGNN (Large)         +0.72    [-2.28, +3.72]   0.5419
+  (* = significant at alpha=0.05, paired two-sided t-test)
+
+  Paired comparisons on ROC-AUC (percentage points)
+  --------------------------------------------------------------------------
+  Comparison (A - B)                            diff            95% CI     p(t)
+  SimpleHeteroGNN - RiskMAGNN (Base)           -3.44    [-5.30, -1.57]   0.0069 *
+  SimpleHeteroGNN - RiskMAGNN (Large)          -2.36    [-4.34, -0.39]   0.0291 *
+  RiskMAGNN (Base) - RiskMAGNN (Large)         +1.07    [-0.63, +2.77]   0.1554
+  (* = significant at alpha=0.05, paired two-sided t-test)
+
+  Paired comparisons on F1 (percentage points)
+  --------------------------------------------------------------------------
+  Comparison (A - B)                            diff            95% CI     p(t)
+  SimpleHeteroGNN - RiskMAGNN (Base)           -0.59    [-3.33, +2.15]   0.5825
+  SimpleHeteroGNN - RiskMAGNN (Large)          -0.58    [-5.98, +4.81]   0.7788
+  RiskMAGNN (Base) - RiskMAGNN (Large)         +0.00    [-4.08, +4.09]   0.9977
+  (* = significant at alpha=0.05, paired two-sided t-test)
+
+==============================================================================
+  Component ablation (RiskMAGNN Base skeleton, 2x2 design)
+  Matched seeds: [0, 1, 7, 11, 21, 42, 77, 123, 2024, 31337]  (n=10)
+==============================================================================
+
+  Descriptive statistics (mean +/- sample std, %)
+  --------------------------------------------------------------------------
+  Model                                PR-AUC        ROC-AUC             F1
+  Full (TransE + RiskBias)       63.50+/-6.78   89.95+/-1.04   62.33+/-3.72
+  -TransE                       61.54+/-10.18   90.51+/-1.03   61.77+/-4.22
+  -RiskBias                      62.61+/-3.20   90.46+/-0.47   61.94+/-2.79
+  -Both                          60.77+/-4.04   89.75+/-0.53   60.62+/-3.27
+
+  Paired comparisons on PR-AUC (percentage points)
+  --------------------------------------------------------------------------
+  Comparison (A - B)                            diff            95% CI     p(t)
+  Full (TransE + RiskBias) - -TransE           +1.96   [-7.33, +11.25]   0.6447
+  Full (TransE + RiskBias) - -RiskBias         +0.89    [-4.00, +5.78]   0.6908
+  Full (TransE + RiskBias) - -Both             +2.72    [-0.10, +5.55]   0.0573
+  -TransE - -RiskBias                          -1.07    [-7.96, +5.82]   0.7330
+  -TransE - -Both                              +0.76    [-6.67, +8.20]   0.8213
+  -RiskBias - -Both                            +1.84    [-1.04, +4.72]   0.1832
+  (* = significant at alpha=0.05, paired two-sided t-test)
+
+  Paired comparisons on ROC-AUC (percentage points)
+  --------------------------------------------------------------------------
+  Comparison (A - B)                            diff            95% CI     p(t)
+  Full (TransE + RiskBias) - -TransE           -0.56    [-1.52, +0.40]   0.2196
+  Full (TransE + RiskBias) - -RiskBias         -0.50    [-1.20, +0.19]   0.1333
+  Full (TransE + RiskBias) - -Both             +0.20    [-0.49, +0.89]   0.5214
+  -TransE - -RiskBias                          +0.06    [-0.61, +0.72]   0.8513
+  -TransE - -Both                              +0.76    [-0.10, +1.63]   0.0759
+  -RiskBias - -Both                            +0.71    [+0.21, +1.20]   0.0104 *
+  (* = significant at alpha=0.05, paired two-sided t-test)
+
+  Paired comparisons on F1 (percentage points)
+  --------------------------------------------------------------------------
+  Comparison (A - B)                            diff            95% CI     p(t)
+  Full (TransE + RiskBias) - -TransE           +0.55    [-3.52, +4.62]   0.7661
+  Full (TransE + RiskBias) - -RiskBias         +0.38    [-2.77, +3.54]   0.7909
+  Full (TransE + RiskBias) - -Both             +1.71    [-0.43, +3.85]   0.1049
+  -TransE - -RiskBias                          -0.17    [-3.90, +3.55]   0.9196
+  -TransE - -Both                              +1.16    [-2.34, +4.65]   0.4729
+  -RiskBias - -Both                            +1.33    [-1.61, +4.27]   0.3332
+  (* = significant at alpha=0.05, paired two-sided t-test)
+
+==============================================================================
+  Elliptic chronological split (homogeneous models + temporal ablation)
+  Matched seeds: [0, 1, 7, 42, 123]  (n=5)
+==============================================================================
+
+  Descriptive statistics (mean +/- sample std, %)
+  --------------------------------------------------------------------------
+  Model                                PR-AUC        ROC-AUC             F1
+  LogisticRegression             16.21+/-0.00   82.44+/-0.00   20.02+/-0.00
+  StaticGraphSAGE                53.77+/-0.98   81.75+/-0.38   22.07+/-2.73
+  TemporalGNN                    52.14+/-1.79   81.59+/-0.98   22.08+/-2.68
+  TemporalGNN (no skip)          43.39+/-4.64   81.62+/-0.80   16.81+/-1.71
+  No temporal (no skip)          38.92+/-6.96   79.24+/-1.49   16.15+/-1.92
+
+  Paired comparisons on PR-AUC (percentage points)
+  --------------------------------------------------------------------------
+  Comparison (A - B)                            diff            95% CI     p(t)
+  LogisticRegression - StaticGraphSAGE        -37.56  [-38.78, -36.34]   0.0000 *
+  LogisticRegression - TemporalGNN            -35.93  [-38.15, -33.71]   0.0000 *
+  LogisticRegression - TemporalGNN (no skip)    -27.17  [-32.94, -21.41]   0.0002 *
+  LogisticRegression - No temporal (no skip)    -22.70  [-31.34, -14.07]   0.0019 *
+  StaticGraphSAGE - TemporalGNN                +1.63    [-1.58, +4.85]   0.2317
+  StaticGraphSAGE - TemporalGNN (no skip)     +10.39   [+4.80, +15.97]   0.0067 *
+  StaticGraphSAGE - No temporal (no skip)     +14.85   [+6.63, +23.08]   0.0074 *
+  TemporalGNN - TemporalGNN (no skip)          +8.75   [+2.10, +15.41]   0.0217 *
+  TemporalGNN - No temporal (no skip)         +13.22   [+3.32, +23.13]   0.0207 *
+  TemporalGNN (no skip) - No temporal (no skip)     +4.47   [-7.78, +16.71]   0.3682
+  (* = significant at alpha=0.05, paired two-sided t-test)
+
+  Paired comparisons on ROC-AUC (percentage points)
+  --------------------------------------------------------------------------
+  Comparison (A - B)                            diff            95% CI     p(t)
+  LogisticRegression - StaticGraphSAGE         +0.69    [+0.21, +1.16]   0.0157 *
+  LogisticRegression - TemporalGNN             +0.84    [-0.37, +2.06]   0.1262
+  LogisticRegression - TemporalGNN (no skip)     +0.82    [-0.17, +1.81]   0.0838
+  LogisticRegression - No temporal (no skip)     +3.19    [+1.34, +5.05]   0.0087 *
+  StaticGraphSAGE - TemporalGNN                +0.16    [-1.07, +1.38]   0.7412
+  StaticGraphSAGE - TemporalGNN (no skip)      +0.13    [-0.87, +1.14]   0.7315
+  StaticGraphSAGE - No temporal (no skip)      +2.51    [+0.27, +4.75]   0.0359 *
+  TemporalGNN - TemporalGNN (no skip)          -0.02    [-1.21, +1.17]   0.9609
+  TemporalGNN - No temporal (no skip)          +2.35    [+0.12, +4.58]   0.0429 *
+  TemporalGNN (no skip) - No temporal (no skip)     +2.37    [+0.44, +4.31]   0.0273 *
+  (* = significant at alpha=0.05, paired two-sided t-test)
+
+  Paired comparisons on F1 (percentage points)
+  --------------------------------------------------------------------------
+  Comparison (A - B)                            diff            95% CI     p(t)
+  LogisticRegression - StaticGraphSAGE         -2.05    [-5.44, +1.35]   0.1692
+  LogisticRegression - TemporalGNN             -2.06    [-5.39, +1.28]   0.1616
+  LogisticRegression - TemporalGNN (no skip)     +3.21    [+1.08, +5.33]   0.0138 *
+  LogisticRegression - No temporal (no skip)     +3.87    [+1.49, +6.26]   0.0108 *
+  StaticGraphSAGE - TemporalGNN                -0.01    [-3.32, +3.30]   0.9944
+  StaticGraphSAGE - TemporalGNN (no skip)      +5.25    [+0.69, +9.82]   0.0331 *
+  StaticGraphSAGE - No temporal (no skip)      +5.92    [+2.75, +9.09]   0.0066 *
+  TemporalGNN - TemporalGNN (no skip)          +5.26    [+2.61, +7.92]   0.0053 *
+  TemporalGNN - No temporal (no skip)          +5.93    [+2.64, +9.22]   0.0075 *
+  TemporalGNN (no skip) - No temporal (no skip)     +0.66    [-2.43, +3.76]   0.5836
+  (* = significant at alpha=0.05, paired two-sided t-test)
+

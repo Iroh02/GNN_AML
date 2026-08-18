@@ -1,0 +1,11 @@
+{
+  "model": "SimpleHeteroGNN + Temporal Wallet Features",
+  "val_pr_auc": 0.9549899457373031,
+  "test_pr_auc": 0.5767441318777191,
+  "test_roc_auc": 0.8662190637301814,
+  "test_f1": 0.45981195025781013,
+  "test_precision": 0.34236675700090335,
+  "test_recall": 0.6999076638965835,
+  "baseline_pr_auc": 0.604,
+  "improvement": -2.725586812228087
+}
