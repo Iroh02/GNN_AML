@@ -45,16 +45,16 @@ reasons for investigating them. We formulate Bitcoin anti-money laundering
 neural networks (GNNs), which leverage both transaction features and
 information from neighbouring transactions, against conventional classifiers
 that consider each transaction independently. We introduce RiskMAGNN, a
-heterogeneous GNN that approximates the role of the wallet address connecting
-pairs of transactions and weights each wallet-sharing relationship using
-priors informed by financial-crime investigation. Across ten random seeds
+heterogeneous GNN that aggregates each type of wallet-sharing relationship
+through learned gates and weights the types using priors informed by
+financial-crime investigation. Across ten random seeds
 with paired significance tests, our central finding is cautionary: a deep
 feature-only classifier closes almost the entire 37.6-point average-precision
 gap between a linear baseline and the GNNs, because the benchmarks'
 engineered features already aggregate neighbourhood information. Explicit
 message passing adds a small but significant ranking gain only in our
-domain-adapted variant ($+1.3$ to $+2.5$ ROC-AUC points, $p\le0.03$), while a
-naive heterogeneous GNN ranks \emph{worse} than the feature-only model.
+variant ($+1.3$ to $+2.5$ ROC-AUC points, $p\le0.03$), while a naive
+heterogeneous GNN ranks \emph{worse} than the feature-only model.
 Ensembling predictions across the ten seeds produces the strongest detector
 (71.2\% average precision), and occasional training collapses in individual
 runs highlight the limitations of single-seed results. We further show that
@@ -98,11 +98,11 @@ gain. Our contributions: (i) a multi-seed comparison of feature-only,
 homogeneous-graph, and heterogeneous-graph models on the Elliptic and HBTBD
 datasets with paired significance tests, showing that capacity-matched
 feature-only baselines close almost the entire gap usually attributed to
-graph structure; (ii) RiskMAGNN, a domain-adapted variant of the
-metapath-aggregated GNN (MAGNN)~\cite{fu2020} combining a translation-based
-approximation of the shared wallet address~\cite{bordes2013} with attention
-over relation types initialised from forensic priors, with a component
-ablation; (iii) evidence that seed-to-seed spread on this benchmark is
+graph structure; (ii) RiskMAGNN, a variant of the metapath-aggregated GNN
+(MAGNN)~\cite{fu2020} combining TransE-style gated
+aggregation~\cite{bordes2013} with attention over relation types initialised
+from forensic priors, together with a component ablation that finds no
+detectable benefit from the gating; (iii) evidence that seed-to-seed spread on this benchmark is
 comparable to the differences between architectures, so single-seed
 comparisons should be treated with caution; and (iv) a diagnostic showing
 that one of the three wallet-sharing relation types is entirely missing from
@@ -169,31 +169,33 @@ shift for precisely the metapath that encodes layering.
 
 RiskMAGNN adapts MAGNN~\cite{fu2020} through two modifications.
 
-\textbf{Translation-based metapath encoding.} MAGNN encodes every node along
-a metapath instance with an intra-metapath instance encoder (mean, linear, or
-relational rotation)~\cite{fu2020}, which requires the identity and features
-of the intermediate node. HBTBD, however, releases only pre-aggregated
-transaction-to-transaction adjacencies in which the identity of the shared
-wallet address is not preserved, so MAGNN's instance encoding cannot be
-applied to this data as shipped. Because for AML that address carries
-independent forensic signal---an address recurring between illicit
-transactions is itself evidence---we approximate the missing intermediate
-with a TransE-style encoding~\cite{bordes2013}: node features are projected
-to a shared $d$-dimensional space $h'$, and for instance
-$P(\text{Tx}_v,\text{Add},\text{Tx}_u)$:
+\textbf{Gated metapath aggregation.} MAGNN encodes \emph{every} node along a
+metapath instance, intermediate entities included, using an intra-metapath
+instance encoder~\cite{fu2020}; HBTBD releases the instance triples
+$(\text{Tx}_v,\text{Add},\text{Tx}_u)$ and 8-dimensional address features
+that such an encoder requires. We state plainly that our implementation does
+\emph{not} use them: it consumes the transaction-to-transaction projection of
+those instances, so no address identity or address feature enters the model.
+What we use in place of the intermediate is the mean of $v$'s neighbouring
+\emph{transaction} embeddings,
+$t_v = |\mathcal{N}_m(v)|^{-1}\sum_{u \in \mathcal{N}_m(v)} h'_u$, combined
+with the node's own embedding through learned per-metapath gates
+$r_1, r_2 \in \mathbb{R}^d$ in the manner of TransE~\cite{bordes2013}:
 \begin{equation}
-t = h'_{\text{Add}},\quad
-o_1 = h'_{\text{Tx}_v} + t \odot r_1,\quad
-o_2 = h'_{\text{Tx}_u} + t \odot r_2
+o_1 = h'_v + t_v \odot r_1, \qquad
+o_2 = t_v + h'_v \odot r_2
 \end{equation}
 \begin{equation}
-h_P = o_1 \oplus t \oplus o_2
+h_v^{(m)} = W\,[\,o_1 \oplus t_v \oplus o_2\,]
 \end{equation}
-where $r_1, r_2 \in \mathbb{R}^d$ are learned relation vectors, $\odot$ is
-the Hadamard product, $\oplus$ is concatenation, and $t$ is proxied by the
-mean of $v$'s metapath neighbours. This adapts MAGNN-style instance encoding
-to a data release lacking intermediate node features; it addresses a
-limitation of the dataset, not of MAGNN.
+with $\odot$ the Hadamard product and $\oplus$ concatenation. This is
+therefore a gated re-parameterisation of neighbour-mean aggregation, not an
+instance encoder, and it is strictly less informative than MAGNN's: the
+forensic signal we motivate it by---an address recurring between illicit
+transactions---is precisely what it cannot see. Our ablation is consistent
+with that reading, finding no detectable benefit from the gating
+(Table~\ref{tab:ablation}). Building a true instance encoder over the
+released address features is the obvious next step and we did not take it.
 
 \textbf{Risk-biased attention over relation types.} After mean-pooling
 instances within each metapath type we fuse the three embeddings with
@@ -344,9 +346,12 @@ aggregation ranks \emph{worse} than the MLP ($-1.02$ ROC-AUC, $p=0.034$),
 whereas RiskMAGNN ranks better than both---$+1.30$ over the MLP at $d$=128
 ($p=0.006$), $+1.50$ at $d$=192 ($p=0.033$), and $+2.3$ to $+2.5$ over
 SimpleHeteroGNN ($p=0.002$). Message passing on these benchmarks is thus not
-free signal: it pays off only when the aggregation carries domain structure,
-and its measurable benefit is a modest, reliable ranking gain rather than
-average precision.
+free signal: how the neighbourhood is aggregated decides whether it helps at
+all, and the measurable benefit is a modest ranking gain rather than average
+precision. We attribute that gain to the architecture as a whole---which also
+differs from SimpleHeteroGNN in using residual connections and LayerNorm
+rather than BatchNorm---because the controlled ablation below cannot pin it
+on either named component.
 
 Two further observations matter in practice. First, \textbf{training can
 collapse on individual seeds}: the $d$=128 model fell to 45.8\% PR-AUC on one
@@ -381,7 +386,7 @@ classifier and training schedule.}
 \textbf{Variant} & \textbf{PR-AUC} & \textbf{ROC-AUC} & \textbf{F1} \\
 \midrule
 Full (both)     & $\mathbf{63.50 \pm 6.78}$ & $89.95 \pm 1.04$ & $\mathbf{62.33 \pm 3.72}$ \\
-$-$ TransE      & $61.54 \pm 10.18$ & $\mathbf{90.51 \pm 1.03}$ & $61.77 \pm 4.22$ \\
+$-$ Gating      & $61.54 \pm 10.18$ & $\mathbf{90.51 \pm 1.03}$ & $61.77 \pm 4.22$ \\
 $-$ Risk bias   & $62.61 \pm 3.20$ & $90.46 \pm 0.47$ & $61.94 \pm 2.79$ \\
 $-$ Both        & $60.77 \pm 4.04$ & $89.75 \pm 0.53$ & $60.62 \pm 3.27$ \\
 \bottomrule
@@ -394,11 +399,13 @@ candidly. On the original five seeds, removing both components cost $3.84$
 PR-AUC points ($p=0.020$); on ten seeds the estimate is $+2.72$, 95\% CI
 $[-0.10, +5.55]$, $p=0.057$---directionally consistent in nine of ten seeds
 but marginal, and not claimed as confirmed. Neither component is individually
-significant. What the ablation shows clearly is instability: three of four
-variants---including the full model---suffer at least one collapsed seed (to
-45.8\%, 34.5\% and 53.0\% PR-AUC), while uniform attention is most stable
-($\pm 3.20$). Component effects of a few points cannot be reliably resolved
-on a benchmark where single seeds can swing by twenty.
+significant; removing the gating alone costs $1.96$ points at $p=0.64$, which
+is what one expects of a re-parameterisation of neighbour-mean aggregation
+that adds no new information. What the ablation shows clearly is instability:
+three of four variants---including the full model---suffer at least one
+collapsed seed (to 45.8\%, 34.5\% and 53.0\% PR-AUC), while uniform attention
+is most stable ($\pm 3.20$). Component effects of a few points cannot be
+reliably resolved on a benchmark where single seeds can swing by twenty.
 
 \subsection{The Validation--Test Gap Diagnostic}
 \label{sec:resplit}
@@ -482,7 +489,12 @@ undetectable when single seeds can collapse, so our non-significant results
 are inconclusive rather than evidence of no effect. The feature-only finding
 is a statement about benchmarks whose features pre-aggregate the
 neighbourhood, not about graph learning in general; on raw transaction data
-without engineered aggregates the comparison could differ. Our attribution of
+without engineered aggregates the comparison could differ. Our models consume
+only the transaction-to-transaction projection of HBTBD's metapath instances,
+so the released instance-level address identities and their 8-dimensional
+features are left unused---an instance encoder over them, as MAGNN
+prescribes, is the most promising untried extension and might change the
+architecture conclusions. Our attribution of
 the validation--test gap to temporal feature shift rests on the MLP control;
 a resplit with M2 removed would isolate M2's marginal contribution directly
 and is left for future work. Both benchmarks are academic-scale (203K and
@@ -501,8 +513,8 @@ empirical finding is cautionary: on both standard AML benchmarks,
 capacity-matched feature-only baselines match GNNs on average precision,
 because the engineered features already aggregate the neighbourhood. What
 survives for architecture is a modest, reliable ranking gain that appears
-only with domain-adapted aggregation ($+1.3$ to $+2.5$ ROC-AUC points,
-$p\le0.03$, versus both a feature-only MLP and a naive heterogeneous GNN),
+only with our aggregation ($+1.3$ to $+2.5$ ROC-AUC points, $p\le0.03$,
+versus both a feature-only MLP and a naive heterogeneous GNN),
 plus a suggestive but unconfirmed joint component effect ($+2.7$
 average-precision points, $p=0.057$). The practical recommendation is the
 seed ensemble, which lifts every architecture by $4$--$5$ points and reaches
@@ -550,10 +562,11 @@ Conference 2020}, Taipei, Taiwan, Apr. 2020, pp.~2331--2341.
 \bibitem{hamilton2017}
 W.~L. Hamilton, R.~Ying, and J.~Leskovec, ``Inductive representation learning
 on large graphs,'' in \emph{Advances in Neural Information Processing
-Systems}, vol.~30, 2017.
+Systems}, vol.~30, 2017, pp.~1024--1034.
 
 \bibitem{weber2019}
-M.~Weber \emph{et al.}, ``Anti-money laundering in Bitcoin: Experimenting with
+M.~Weber, G.~Domeniconi, J.~Chen, D.~K.~I. Weidele, C.~Bellei, T.~Robinson,
+and C.~E. Leiserson, ``Anti-money laundering in Bitcoin: Experimenting with
 graph convolutional networks for financial forensics,'' arXiv:1908.02591,
 2019.
 
@@ -577,7 +590,7 @@ review and experimental evaluation,'' arXiv:2405.19383, 2024.
 \bibitem{ying2019}
 R.~Ying, D.~Bourgeois, J.~You, M.~Zitnik, and J.~Leskovec, ``GNNExplainer:
 Generating explanations for graph neural networks,'' in \emph{Advances in
-Neural Information Processing Systems}, vol.~32, 2019, pp.~9240--9251.
+Neural Information Processing Systems}, vol.~32, 2019. arXiv:1903.03894.
 
 \bibitem{johannessen2025}
 F.~Johannessen and M.~Jullum, ``Finding money launderers using heterogeneous
