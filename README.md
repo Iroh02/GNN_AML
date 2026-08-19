@@ -49,8 +49,10 @@ significance tests are paired across seeds.
 | Approach | Dataset | Test PR-AUC | Test ROC-AUC |
 |----------|---------|-------------|--------------|
 | Logistic Regression (feature-only) | Elliptic | 16.21 ± 0.00 | 82.44 ± 0.00 |
+| **Deep MLP (no graph)** | Elliptic | 53.32 ± 3.67 | 81.87 ± 0.23 |
 | Static GraphSAGE | Elliptic | 53.77 ± 0.98 | 81.75 ± 0.38 |
 | Temporal GNN (timestep input) | Elliptic | 52.14 ± 1.79 | 81.59 ± 0.98 |
+| **Deep MLP (no graph)** | HBTBD | 64.70 ± 2.24 | 88.65 ± 0.77 |
 | SimpleHeteroGNN | HBTBD | 64.80 ± 1.22 | 87.62 ± 1.20 |
 | RiskMAGNN (d=128, L=2) | HBTBD | 63.50 ± 6.78 | 89.95 ± 1.04 |
 | RiskMAGNN (d=192, L=3) | HBTBD | 66.83 ± 4.04 | 90.15 ± 1.38 |
@@ -58,17 +60,24 @@ significance tests are paired across seeds.
 
 What survives seed control:
 
-- **Graph structure is the dominant effect**: +37.56 PR-AUC points over the
-  feature-only baseline, 95% CI [+36.34, +38.78], *p* < 10⁻⁴.
-- **RiskMAGNN vs. SimpleHeteroGNN**: significant on ROC-AUC for both sizes
-  (+2.33 / +2.53 pp, *p* = 0.002 each); **not** significant on PR-AUC
-  (+2.03 pp, *p* = 0.099).
+- **The headline "graph structure" effect is mostly model class.** A deep
+  feature-only MLP recovers +37.11 of the 37.56 pp separating logistic
+  regression from GraphSAGE; GraphSAGE leads the MLP by only +0.45 pp
+  (*p* = 0.83). Both benchmarks' features already contain 1-hop/2-hop
+  neighbourhood aggregates, so "feature-only" is not graph-blind.
+- **Message passing pays off only with domain structure.** RiskMAGNN beats
+  the MLP on ROC-AUC (+1.30 at d=128, *p* = 0.006; +1.50 at d=192,
+  *p* = 0.033) and SimpleHeteroGNN by +2.33/+2.53 (*p* = 0.002), while naive
+  metapath aggregation ranks *worse* than the MLP (−1.02, *p* = 0.034).
+  PR-AUC differences among all single models are within seed noise.
 - **Seed ensembling**: +4–5 PR-AUC points for every architecture — the
   cheapest reliable improvement on this benchmark.
 - **The two proposed components jointly**: +2.72 PR-AUC points, *p* = 0.057
   at n=10 — suggestive, not confirmed. Training can collapse on single seeds
   (three of four ablation variants had ≥1 collapse), which is why single-seed
   results here should not be trusted.
+- **The HBTBD val–test gap is temporal shift, not just the missing M2
+  metapath**: the MLP uses no metapaths yet shows a 34.7 pp gap.
 
 > ⚠️ **Superseded numbers.** Earlier versions of this README and the submitted
 > manuscript reported 69.02% PR-AUC for RiskMAGNN and 60.4% for

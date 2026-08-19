@@ -101,6 +101,23 @@ transfer worse than the default under the val–test shift).
 its results are retained in `results/multiseed_all.json` and are the first
 five seeds of the extended run.)
 
+### Feature-only baselines (the deconfounding controls)
+
+```bash
+python run_mlp_baseline.py   # Elliptic, 5 seeds
+python run_mlp_hbtbd.py      # HBTBD, 10 seeds
+```
+
+Deep MLPs matched to the GNNs in depth, width, loss, optimiser, schedule and
+seeds, but given **no graph input**. These separate "model class" from
+"message passing" in the headline comparison: on Elliptic the MLP recovers
++37.11 of the 37.56 pp attributed to graph structure; on HBTBD it is
+statistically indistinguishable from the heterogeneous GNNs on PR-AUC.
+
+- **Writes:** `results/mlp_baseline_elliptic.json/.csv`,
+  `results/mlp_baseline_hbtbd.json/.csv`
+- **Runtime:** ≈ 3 min and ≈ 6 min
+
 ### Component ablation (n=10)
 
 ```bash
