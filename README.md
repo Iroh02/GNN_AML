@@ -79,6 +79,20 @@ What survives seed control:
 - **The HBTBD val–test gap is temporal shift, not just the missing M2
   metapath**: the MLP uses no metapaths yet shows a 34.7 pp gap.
 
+### Dataset finding: HBTBD ships an empty M2 training adjacency list
+
+`m2.adjlist` for the training split is 0 bytes, but the release's own
+instance file `idx01.pickle` contains **602,850 M2 training instances**
+(382,342 with distinct endpoints) spanning training time steps 1–34. For M1
+the two views match exactly (3,305,618 vs 3,305,618). Any pipeline built on
+the adjacency lists therefore trains without the layering metapath while the
+data sits unused in the same release. Reproduce with
+`python build_address_features.py`.
+
+The instance files also carry the intermediate **address node ids**, and
+`features1-3.npy` hold 8 features per address node. The models in the paper
+use none of this — they read only `features0.npy` and the adjacency lists.
+
 > ⚠️ **Superseded numbers.** Earlier versions of this README and the submitted
 > manuscript reported 69.02% PR-AUC for RiskMAGNN and 60.4% for
 > SimpleHeteroGNN. Those were single-seed results measured under

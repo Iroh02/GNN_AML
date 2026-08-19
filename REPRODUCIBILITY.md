@@ -101,6 +101,27 @@ transfer worse than the default under the val–test shift).
 its results are retained in `results/multiseed_all.json` and are the first
 five seeds of the extended run.)
 
+### Dataset audit: the empty M2 training adjacency list
+
+```bash
+python build_address_features.py
+```
+
+Reads the metapath instance files (`idx00/01/02.pickle`) that the adjacency
+lists are derived from. Two facts this surfaces, both reproducible:
+
+- `m2.adjlist` for the training split is **0 bytes**, yet `idx01.pickle`
+  contains **602,850 M2 training instances** (382,342 with distinct
+  endpoints) whose source transactions span training time steps **1–34**.
+  For M1 the two views agree exactly (3,305,618 instances vs. 3,305,618
+  adjacency edges), so the M2 discrepancy is an inconsistency in the release.
+- The instance files also carry the intermediate **address node ids**, and
+  `features1-3.npy` provide 8 features per address node. The script writes
+  per-node address aggregates (`address_agg.npy`, `address_mask.npy`) that
+  would be needed to implement a MAGNN-style instance encoder. **The models
+  reported in the paper do not use these** — they consume only
+  `features0.npy` and the adjacency lists.
+
 ### Feature-only baselines (the deconfounding controls)
 
 ```bash

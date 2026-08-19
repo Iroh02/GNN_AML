@@ -57,11 +57,13 @@ variant ($+1.3$ to $+2.5$ ROC-AUC points, $p\le0.03$), while a naive
 heterogeneous GNN ranks \emph{worse} than the feature-only model.
 Ensembling predictions across the ten seeds produces the strongest detector
 (71.2\% average precision), and occasional training collapses in individual
-runs highlight the limitations of single-seed results. We further show that
-one of the three wallet-sharing relation types is entirely absent from the
-training portion of the standard benchmark split, the most visible symptom of
-a temporal distribution shift that---rather than model capacity---accounts
-for most of the observed validation--test gap. An explanation module provides
+runs highlight the limitations of single-seed results. We further report an
+internal inconsistency in the benchmark release: the adjacency list for one
+of the three wallet-sharing relation types is empty for training, although
+the release's own instance files contain that relation throughout the
+training period, so adjacency-driven pipelines silently train without it. The
+resulting validation--test gap is nonetheless dominated by temporal
+distribution shift rather than by model capacity. An explanation module provides
 transaction-level justifications for compliance review, and all code and
 experimental results are released for reproducibility.
 \end{abstract}
@@ -102,13 +104,16 @@ graph structure; (ii) RiskMAGNN, a variant of the metapath-aggregated GNN
 (MAGNN)~\cite{fu2020} combining TransE-style gated
 aggregation~\cite{bordes2013} with attention over relation types initialised
 from forensic priors, together with a component ablation that finds no
-detectable benefit from the gating; (iii) evidence that seed-to-seed spread on this benchmark is
-comparable to the differences between architectures, so single-seed
-comparisons should be treated with caution; and (iv) a diagnostic showing
-that one of the three wallet-sharing relation types is entirely missing from
-the official HBTBD training split---a previously unreported symptom of a
-temporal distribution shift that accounts for most of the validation--test
-gap. An explanation module
+detectable benefit from the gating; (iii) evidence that seed-to-seed spread
+on this benchmark is comparable to the differences between architectures, so
+single-seed comparisons should be treated with caution; and (iv) a
+previously unreported inconsistency in the HBTBD release---the training
+adjacency list for one of the three wallet-sharing relation types is empty
+although the release's own instance files contain that relation throughout
+the training period---which silently removes the layering metapath from
+adjacency-driven pipelines, together with evidence that the resulting
+validation--test gap is dominated by temporal distribution shift rather than
+by model capacity. An explanation module
 built on GNNExplainer~\cite{ying2019} supplies per-transaction
 justifications. Code and all result files are available at
 \url{https://github.com/Iroh02/GNN_AML}.\footnote{See
@@ -158,12 +163,22 @@ both paying into the same address, the signature of a mixing service;
 through a forwarding address, characteristic of layering; \textbf{M3}
 (Tx\,$\leftarrow$\,Add\_C\,$\rightarrow$\,Tx), both drawing from the same
 source, consistent with structuring. The official split provides 29{,}699
-training and 16{,}346 test transaction nodes with 165 features each. One
-asymmetry is critical to every result below: \textbf{M2 edges are entirely
-absent from the training set} (0 instances) but number 77{,}418 in the test
-set, because one-way flows appear only in time steps 35--49. Any temporally
-valid partition of HBTBD inherits this asymmetry---a severe distribution
-shift for precisely the metapath that encodes layering.
+training and 16{,}346 test transaction nodes with 165 features each.
+
+One property of the release is critical to every result below:
+\textbf{the M2 adjacency list shipped for the training split is empty}
+(0 edges, versus 77{,}418 in the test split), so any pipeline built on the
+released adjacency lists---including ours---trains with no one-way-flow
+structure at all. This is not a temporal property of the data. The release
+also ships the metapath \emph{instances} as triples
+$(\text{Tx}_v,\text{Add},\text{Tx}_u)$, and the M2 instance file contains
+602{,}850 training instances (382{,}342 with distinct endpoints, spanning
+training time steps 1--34). For M1 the two views agree exactly---3{,}305{,}618
+instances and 3{,}305{,}618 adjacency edges---so the M2 discrepancy is an
+internal inconsistency in the release rather than an absence of the
+underlying behaviour. We report it because it silently removes the metapath
+that encodes layering from any adjacency-driven pipeline, and we have not
+seen it noted before.
 
 \section{RiskMAGNN}
 
@@ -411,9 +426,9 @@ reliably resolved on a benchmark where single seeds can swing by twenty.
 \label{sec:resplit}
 
 \begin{table}[t]
-\caption{Effect of M2 availability during training (RiskMAGNN $d$=192;
-official row over 10 seeds, resplit row over 5). The resplit sacrifices
-temporal validity and is a diagnostic, not a performance claim.}
+\caption{Effect of resplitting on the validation--test gap (RiskMAGNN
+$d$=192; official row over 10 seeds, resplit row over 5). The resplit
+sacrifices temporal validity and is a diagnostic, not a performance claim.}
 \label{tab:resplit}
 \centering
 \footnotesize
@@ -422,8 +437,8 @@ temporal validity and is a diagnostic, not a performance claim.}
 \toprule
 \textbf{Split} & \textbf{Val PR} & \textbf{Test PR} & \textbf{Gap (pp)} \\
 \midrule
-Official (M2 absent)  & $96.5 \pm 1.5$ & $66.8 \pm 4.0$ & $29.7 \pm 4.0$ \\
-Resplit (M2 present)  & $97.5 \pm 1.4$ & $94.3 \pm 0.4$ & $3.2 \pm 1.4$ \\
+Official (temporal)   & $96.5 \pm 1.5$ & $66.8 \pm 4.0$ & $29.7 \pm 4.0$ \\
+Stratified resplit    & $97.5 \pm 1.4$ & $94.3 \pm 0.4$ & $3.2 \pm 1.4$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -432,15 +447,16 @@ We build a stratified random 80/20 resplit of the combined HBTBD
 data---deliberately breaking temporal ordering, as a diagnostic only. The
 validation--test gap collapses from $29.7 \pm 4.0$ to $3.2 \pm 1.4$ points
 (Table~\ref{tab:resplit}), with resplit test PR-AUC remarkably stable
-($\pm 0.35$). Attribution requires care: the resplit both makes M2 available
-in training \emph{and} equalises the train/test feature distributions, so it
-cannot separate the two. The feature-only MLP settles the question---it uses
-no metapaths yet shows an even larger gap ($34.7 \pm 2.2$ points), so the
-dominant cause is temporal distribution shift in the features themselves, of
-which the M2 asymmetry is the most visible structural symptom. Either way
-the practical conclusion for users of this benchmark stands: the official
-split severely understates deployment-style performance, and random-split
-evaluations (as in the dataset's original paper) severely overstate it.
+($\pm 0.35$). Attribution requires care: the resplit both restores M2 edges
+to training (drawn from the test adjacency list) \emph{and} equalises the
+train/test feature distributions, so it cannot separate the two. The
+feature-only MLP settles the question---it uses no metapaths at all yet shows
+an even larger gap ($34.7 \pm 2.2$ points), so the dominant cause is temporal
+distribution shift in the features themselves rather than the missing
+relation type. The practical conclusion for users of this benchmark stands
+either way: the official split severely understates deployment-style
+performance, and random-split evaluations (as in the dataset's original
+paper) severely overstate it.
 
 \subsection{Explanation Findings}
 
@@ -477,10 +493,10 @@ Three claims from the submitted version did not survive and are withdrawn
 above. In hindsight, the explanation analysis anticipated the feature-only
 result: the masks already showed the model leaning on the neighbourhood
 aggregates baked into the features rather than on anything only message
-passing could reach. We consider the two benchmark findings---the temporal
-shift in HBTBD's official split and the strength of capacity-matched
-feature-only baselines---the most useful contributions, since they affect
-anyone evaluating GNNs on these datasets.
+passing could reach. We consider the benchmark findings---the empty M2
+training adjacency list, the temporal shift in HBTBD's official split, and
+the strength of capacity-matched feature-only baselines---the most useful
+contributions, since they affect anyone evaluating GNNs on these datasets.
 
 \section{Limitations}
 
@@ -494,10 +510,11 @@ only the transaction-to-transaction projection of HBTBD's metapath instances,
 so the released instance-level address identities and their 8-dimensional
 features are left unused---an instance encoder over them, as MAGNN
 prescribes, is the most promising untried extension and might change the
-architecture conclusions. Our attribution of
-the validation--test gap to temporal feature shift rests on the MLP control;
-a resplit with M2 removed would isolate M2's marginal contribution directly
-and is left for future work. Both benchmarks are academic-scale (203K and
+architecture conclusions. The same applies to the empty M2 training
+adjacency list: we identified it while preparing this version and did not
+retrain with M2 restored from the instance files, so how much the missing
+relation type actually costs remains unmeasured. Our attribution of the
+validation--test gap to temporal feature shift rests on the MLP control. Both benchmarks are academic-scale (203K and
 46K transaction nodes). We do not evaluate dedicated temporal graph
 architectures (TGN, TGAT), so our temporal findings are limited to timestep
 position encoding. Explanation optimisation (200 steps per transaction) is
@@ -520,9 +537,10 @@ average-precision points, $p=0.057$). The practical recommendation is the
 seed ensemble, which lifts every architecture by $4$--$5$ points and reaches
 71.2\% average precision. We could not replicate the larger single-seed gains
 in our submitted version and report corrected numbers here. The most
-transferable result is a property of the benchmark rather than any model:
-HBTBD's official split carries a severe temporal distribution shift---most
-visibly, the M2 metapath is absent from training---that accounts for most of
+transferable results are properties of the benchmark rather than of any
+model: HBTBD ships an empty M2 training adjacency list while its own instance
+files contain that relation throughout the training period, and the official
+split carries a severe temporal distribution shift that accounts for most of
 the validation--test gap. Code and all result files are released so these
 numbers can be checked.
 
